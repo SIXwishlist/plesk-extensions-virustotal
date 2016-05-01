@@ -87,27 +87,10 @@ class IndexController extends pm_Controller_Action
 
         $this->view->form = $form;
     }
-
-    private function _getDomains()
-    {
-        $domains = [];
-        $sites_request = '<site><get><filter/><dataset><gen_info/></dataset></get></site>';
-        $websp_request = '<webspace><get><filter/><dataset><gen_info/></dataset></get></webspace>';
-        $api = pm_ApiRpc::getService();
-        // site->get->result->[ id, data -> gen_info ( [cr_date] , [name] , [ascii-name] , [status] => 0 , [dns_ip_address] , [htype] )
-        $sites_response = $api->call($sites_request);
-        $websp_response = $api->call($websp_request);
-        $tmp_list = array_merge($sites_response->site->get->result, $websp_response->webspace->get->result);
-        
-        
-
-
-        return $sites_response;
-    }
-
+    
     private function _getDomainsReportList() 
     {
-        return $this->_getDomains();
+        return Modules_PleskExtensionsVirustotal_Helper::getDomains();
     }
 
 }
