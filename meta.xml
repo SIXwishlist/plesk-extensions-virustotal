@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
-  <id>my-extension</id>
-  <name>Module my-extension</name>
-  <description>Add module description here...</description>
+  <id>virustotal-site-checker</id>
+  <name>VirusTotal Site Checker</name>
+  <description>Check your sites on VirusTotal</description>
   <version>1.0</version>
   <release>1</release>
-  <vendor>asfsafafs</vendor>
-  <url>http://your-company-web-site</url>
-  <plesk_min_version>17.0.12</plesk_min_version>
+  <vendor>Oleg Neumyvakin</vendor>
+  <url>http://twitter.com/oneumyvakin</url>
+  <plesk_min_version>12.5.30</plesk_min_version>
 </module>
