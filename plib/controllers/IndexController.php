@@ -53,7 +53,7 @@ class IndexController extends pm_Controller_Action
     public function settingsAction() 
     {
         $this->view->help_tip = "You can obtain API key after register on <a target='_blank' href='https://virustotal.com/'>https://virustotal.com/</a>";
-        $this->view->debug = print_r($this->_getDomainsReportList(), 1);
+        $this->view->debug = print_r(json_encode($this->_getDomainsReportList()), 1);
         // Init form here
         $form = new pm_Form_Simple();
 

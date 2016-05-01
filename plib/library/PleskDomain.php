@@ -10,7 +10,10 @@ class Modules_PleskExtensionsVirustotal_PleskDomain
         $this->dns_ip_address = $dns_ip_address;
         $this->htype = $htype;
     }
-
+    
+    /**
+     * @return bool
+     */
     private function isResolvingToPlesk() {
         /*
            array(5) {
@@ -48,6 +51,10 @@ class Modules_PleskExtensionsVirustotal_PleskDomain
         return false;
     }
 
+
+    /**
+     * @return bool
+     */
     public function isValid() {
         if ($this->status > 0) {
             return false;

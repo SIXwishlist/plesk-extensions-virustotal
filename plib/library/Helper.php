@@ -2,22 +2,88 @@
 
 class Modules_PleskExtensionsVirustotal_Helper
 {
+    const virustotal_scan_url = 'https://www.virustotal.com/vtapi/v2/url/scan';
+    const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
+    const virustotal_api_timeout = 30;
 
     public static  function check()
     {
+        if (!pm_Settings::get('virustotal_enabled') || !pm_Settings::get('virustotal_api_key')) {
+            return;
+        }
+
         $queue = [];
 
         foreach (self::getDomains() as $domain) {
+            if (!$domain->isValid()) {
+                continue;
+            }
+
+
+
+            $virustotal_request = array(
+                'domain' => $domain,
+                'virustotal_request' => self::virustotal_scan_url_request($domain->ascii_name)
+            );
+
+            pm_Settings::set('domain_id_' . $domain->id, json_encode($virustotal_request));
+            $queue[] = $virustotal_request;
+        }
+
+    }
+
+    public static function report()
+    {
+        foreach (self::getDomains() as $domain) {
+            $request = json_decode(pm_Settings::get('domain_id_' . $domain->id));
+            if (!$request) {
+                continue;
+            }
+
+            $report = self::virustotal_scan_url_report($domain->ascii_name);
+            if (isset($report['positives']) && $report['positives'] > 0) {
+                
+            }
 
         }
     }
 
-    public function virustotal_check_url($url)
+    /**
+     * @param $url string
+     * @return array
+     */
+    public static function virustotal_scan_url_request($url)
     {
+        $client = new Zend_Http_Client(self::virustotal_scan_url);
 
+        $client->setParameterPost('url', $url);
+        $client->setParameterPost('apikey', pm_Settings::get('virustotal_api_key'));
+        sleep(self::virustotal_api_timeout);
+        $response = $client->request(Zend_Http_Client::POST);
+
+        return json_decode($response->getBody());
     }
 
-    public function getDomains()
+    /**
+     * @param $url string
+     * @return array
+     */
+    public static function virustotal_scan_url_report($url)
+    {
+        $client = new Zend_Http_Client(self::virustotal_report_url);
+
+        $client->setParameterPost('resource', $url);
+        $client->setParameterPost('apikey', pm_Settings::get('virustotal_api_key'));
+        sleep(self::virustotal_api_timeout);
+        $response = $client->request(Zend_Http_Client::POST);
+
+        return json_decode($response->getBody());
+    }
+
+    /**
+     * @return Modules_PleskExtensionsVirustotal_PleskDomain[]
+     */
+    public static function getDomains()
     {
         $domains = [];
         $sites_request = '<site><get><filter/><dataset><gen_info/></dataset></get></site>';
