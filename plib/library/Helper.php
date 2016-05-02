@@ -6,6 +6,7 @@ class Modules_PleskExtensionsVirustotal_Helper
     const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
     const virustotal_domain_info_url = 'https://www.virustotal.com/domain/%s/information/';
     const virustotal_api_timeout = 20;
+    const virustotal_api_day_limit = 4300;
 
     public static  function check()
     {
@@ -17,6 +18,14 @@ class Modules_PleskExtensionsVirustotal_Helper
         self::report();
 
         foreach (self::getDomains() as $domain) {
+            if (!self::is_last_domain('check', $domain)) {
+                continue;
+            }
+            if (self::is_enough()) {
+                exit(0);
+            }
+            
+            
             $request = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
             if ($request && !$request['virustotal_request_done']) {
                 continue;
@@ -35,11 +44,56 @@ class Modules_PleskExtensionsVirustotal_Helper
             pm_Settings::set('domain_id_' . $domain->id, json_encode($virustotal_request));
             pm_Settings::set('last_scan', date("d/M/Y G:i"));
         }
+
+        self::cleanup_last_domains();
+    }
+
+    /**
+     * VirusTotal API has restriction in 4 req/min, for safety we have limit to 3 req/min (4320 req/day)
+     * 
+     * @return bool
+     */
+    public static function is_enough()
+    {
+        static $counter = 0;
+        if ($counter >= self::virustotal_api_day_limit) {
+            return true;
+        }
+        $counter++;
+        return false;
+    }
+
+    /**
+     * @param  $operation string
+     * @param  $domain Modules_PleskExtensionsVirustotal_PleskDomain
+     * @return bool
+     */
+    public static function is_last_domain($operation, $domain)
+    {
+        $last = json_decode(pm_Settings::get('last_domain_' . $operation), true);
+        if (!$last) {
+            pm_Settings::set('last_domain_' . $operation, json_encode($domain));
+            return true;
+        }
+
+        if ($domain->id < $last['id']) {
+            return false;
+        }
+
+        pm_Settings::set('last_domain_' . $operation, json_encode($domain));
+        return true;
     }
 
     public static function report()
     {
         foreach (self::getDomains() as $domain) {
+            if (!self::is_last_domain('report', $domain)) {
+                continue;
+            }
+            if (self::is_enough()) {
+                exit(0);
+            }
+
             $request = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
             if (!$request) {
                 continue;
@@ -57,6 +111,16 @@ class Modules_PleskExtensionsVirustotal_Helper
                     self::unreport_domain($domain);
                 }
             }
+        }
+
+        self::cleanup_last_domains();
+    }
+
+    public static function cleanup_last_domains()
+    {
+        $ops = ['report', 'check'];
+        foreach ($ops as $operation) {
+            pm_Settings::set('last_domain_' . $operation, null);
         }
     }
 
@@ -188,6 +252,7 @@ class Modules_PleskExtensionsVirustotal_Helper
             );
         }
 
+        ksort($domains);
         return $domains;
     }
 }
