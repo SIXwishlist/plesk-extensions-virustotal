@@ -9,6 +9,6 @@ $messages = array(
     'virustotalPromoTitle' => 'VirusTotal Reports',
     'virustotalPromoButtonTitle' => 'Show',
     'noReports' => 'Information is not available.',
-    'newReports' => 'New reports: ',
+    'totalReports' => 'Total "bad" reports: ',
     'lastScan' => 'last scan at ',
 );

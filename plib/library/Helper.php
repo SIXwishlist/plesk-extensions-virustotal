@@ -13,6 +13,7 @@ class Modules_PleskExtensionsVirustotal_Helper
             return;
         }
 
+        self::cleanup_admin_report();
         self::report();
 
         foreach (self::getDomains() as $domain) {
@@ -46,16 +47,53 @@ class Modules_PleskExtensionsVirustotal_Helper
 
             $report = self::virustotal_scan_url_report($domain->ascii_name);
             if (isset($report['positives'])) {
-
                 $request['virustotal_request_done'] = true;
-                
+                $request['virustotal_report_positives'] = $report['positives'];
+                pm_Settings::set('domain_id_' . $domain->id, json_encode($request));
+
                 if ($report['positives'] > 0) {
                     self::report_domain($domain, $report);
+                } else {
+                    self::unreport_domain($domain);
                 }
-
-                pm_Settings::set('domain_id_' . $domain->id, json_encode($request));
             }
         }
+    }
+
+    public static function cleanup_admin_report()
+    {
+        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
+        if (!is_array($admin_report)) {
+            return;
+        }
+
+        $to_delete = [];
+        $domains = self::getDomains();
+        foreach ($admin_report['domains'] as $key => $report) {
+            if (!isset($domains[$report['domain']['id']])) {
+                $to_delete[] = $key;
+            }
+        }
+        foreach ($to_delete as $key) {
+            unset($admin_report['domains'][$key]);
+        }
+
+        pm_Settings::set('admin_report', json_encode($admin_report));
+    }
+
+    /**
+     * @param $domain Modules_PleskExtensionsVirustotal_PleskDomain
+     * @return null
+     */
+    public static function unreport_domain($domain)
+    {
+        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
+        if (!is_array($admin_report)) {
+            return;
+        }
+
+        unset($admin_report['domains'][$domain->ascii_name]);
+        pm_Settings::set('admin_report', json_encode($admin_report));
     }
 
     /**
@@ -68,13 +106,8 @@ class Modules_PleskExtensionsVirustotal_Helper
         $admin_report = json_decode(pm_Settings::get('admin_report'), true);
         if (!is_array($admin_report)) {
             $admin_report = array(
-                'new_reports' => 0,
                 'domains' => []
             );
-        }
-
-        if (!isset($admin_report['domains'][$domain->ascii_name])) {
-            $admin_report['new_reports']++;
         }
 
         $admin_report['domains'][$domain->ascii_name] = array(
@@ -125,7 +158,10 @@ class Modules_PleskExtensionsVirustotal_Helper
      */
     public static function getDomains()
     {
-        $domains = [];
+        static $domains = [];
+        if ($domains) {
+            return $domains;
+        }
         $sites_request = '<site><get><filter/><dataset><gen_info/></dataset></get></site>';
         $websp_request = '<webspace><get><filter/><dataset><gen_info/></dataset></get></webspace>';
         $api = pm_ApiRpc::getService();
@@ -142,7 +178,7 @@ class Modules_PleskExtensionsVirustotal_Helper
         $tmp_list = array_merge($sites_array, $websp_array);
         foreach ($tmp_list as $domain) {
 
-            $domains[] = new Modules_PleskExtensionsVirustotal_PleskDomain(
+            $domains[$domain->id] = new Modules_PleskExtensionsVirustotal_PleskDomain(
                 $domain->id,
                 $domain->data->gen_info->name,
                 $domain->data->gen_info->{'ascii-name'},
