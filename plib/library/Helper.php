@@ -4,7 +4,7 @@ class Modules_PleskExtensionsVirustotal_Helper
 {
     const virustotal_scan_url = 'https://www.virustotal.com/vtapi/v2/url/scan';
     const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
-    const virustotal_api_timeout = 30;
+    const virustotal_api_timeout = 20;
 
     public static  function check()
     {
@@ -12,24 +12,26 @@ class Modules_PleskExtensionsVirustotal_Helper
             return;
         }
 
-        $queue = [];
+        self::report();
 
         foreach (self::getDomains() as $domain) {
+            $request = json_decode(pm_Settings::get('domain_id_' . $domain->id));
+            if ($request && !$request['virustotal_request_done']) {
+                continue;
+            }
+            
             if (!$domain->isValid()) {
                 continue;
             }
-
-
-
+            
             $virustotal_request = array(
                 'domain' => $domain,
+                'virustotal_request_done' => false,
                 'virustotal_request' => self::virustotal_scan_url_request($domain->ascii_name)
             );
 
             pm_Settings::set('domain_id_' . $domain->id, json_encode($virustotal_request));
-            $queue[] = $virustotal_request;
         }
-
     }
 
     public static function report()
@@ -41,10 +43,27 @@ class Modules_PleskExtensionsVirustotal_Helper
             }
 
             $report = self::virustotal_scan_url_report($domain->ascii_name);
-            if (isset($report['positives']) && $report['positives'] > 0) {
-                
-            }
+            if (isset($report['positives'])) {
 
+                $request['virustotal_request_done'] = true;
+                
+                if ($report['positives'] > 0) {
+                    $admin_report = json_decode(pm_Settings::get('admin_report'));
+                    if (!is_array($admin_report)) {
+                        $admin_report = array();
+                    }
+    
+                    $admin_report[] = array(
+                        'domain' => $domain,
+                        'virustotal_request' => $request['virustotal_request'],
+                        'virustotal_report' => $report
+                    );
+    
+                    pm_Settings::set('admin_report', json_encode($admin_report));
+                }
+
+                pm_Settings::set('domain_id_' . $domain->id, json_encode($request));
+            }
         }
     }
 

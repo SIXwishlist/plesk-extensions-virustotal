@@ -43,9 +43,10 @@ class Modules_PleskExtensionsVirustotal_PleskDomain
             } elseif (isset($r['ipv6'])) {
                 $ip = $r['ipv6'];
             }
-            
-            if ($ip === $this->dns_ip_address) {
-                return true;
+            foreach ($this->dns_ip_address as $domain_ip) {
+                if ($ip === $domain_ip) {
+                    return true;
+                }
             }
         }
         return false;
