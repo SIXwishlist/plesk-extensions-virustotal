@@ -4,6 +4,7 @@ class Modules_PleskExtensionsVirustotal_Helper
 {
     const virustotal_scan_url = 'https://www.virustotal.com/vtapi/v2/url/scan';
     const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
+    const virustotal_domain_info_url = 'https://www.virustotal.com/domain/%s/information/';
     const virustotal_api_timeout = 20;
 
     public static  function check()
@@ -15,15 +16,15 @@ class Modules_PleskExtensionsVirustotal_Helper
         self::report();
 
         foreach (self::getDomains() as $domain) {
-            $request = json_decode(pm_Settings::get('domain_id_' . $domain->id));
+            $request = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
             if ($request && !$request['virustotal_request_done']) {
                 continue;
             }
-            
+            /*
             if (!$domain->isValid()) {
                 continue;
             }
-            
+            */
             $virustotal_request = array(
                 'domain' => $domain,
                 'virustotal_request_done' => false,
@@ -37,7 +38,7 @@ class Modules_PleskExtensionsVirustotal_Helper
     public static function report()
     {
         foreach (self::getDomains() as $domain) {
-            $request = json_decode(pm_Settings::get('domain_id_' . $domain->id));
+            $request = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
             if (!$request) {
                 continue;
             }
@@ -48,23 +49,35 @@ class Modules_PleskExtensionsVirustotal_Helper
                 $request['virustotal_request_done'] = true;
                 
                 if ($report['positives'] > 0) {
-                    $admin_report = json_decode(pm_Settings::get('admin_report'));
-                    if (!is_array($admin_report)) {
-                        $admin_report = array();
-                    }
-    
-                    $admin_report[] = array(
-                        'domain' => $domain,
-                        'virustotal_request' => $request['virustotal_request'],
-                        'virustotal_report' => $report
-                    );
-    
-                    pm_Settings::set('admin_report', json_encode($admin_report));
+                    self::report_domain($domain, $report);
                 }
 
                 pm_Settings::set('domain_id_' . $domain->id, json_encode($request));
             }
         }
+    }
+
+    /**
+     * @param $domain Modules_PleskExtensionsVirustotal_PleskDomain
+     * @param $report array
+     * @return null
+     */
+    public static function report_domain($domain, $report)
+    {
+        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
+        if (!is_array($admin_report)) {
+            $admin_report = array();
+        }
+
+        $admin_report[] = array(
+            'domain' => $domain,
+            'virustotal_domain_info_url' => sprintf(self::virustotal_domain_info_url, $domain->ascii_name),
+            'virustotal_positives' => $report['positives'],
+            'virustotal_total' => isset($report['total']) ? $report['total'] : '',
+            'virustotal_scan_date' => isset($report['scan_date']) ? $report['total'] : ''
+        );
+
+        pm_Settings::set('admin_report', json_encode($admin_report));
     }
 
     /**
@@ -80,7 +93,7 @@ class Modules_PleskExtensionsVirustotal_Helper
         sleep(self::virustotal_api_timeout);
         $response = $client->request(Zend_Http_Client::POST);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), true);
     }
 
     /**
@@ -96,7 +109,7 @@ class Modules_PleskExtensionsVirustotal_Helper
         sleep(self::virustotal_api_timeout);
         $response = $client->request(Zend_Http_Client::POST);
 
-        return json_decode($response->getBody());
+        return json_decode($response->getBody(), true);
     }
 
     /**
