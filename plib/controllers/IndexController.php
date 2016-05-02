@@ -26,7 +26,6 @@ class IndexController extends pm_Controller_Action
 
     public function indexAction()
     {
-        // Default action will be settingsAction
         if (!pm_Settings::get('virustotal_enabled')) {
             $this->_forward('settings');
             return;
@@ -37,24 +36,20 @@ class IndexController extends pm_Controller_Action
 
     public function reportAction()
     {
-        // Default action will be settingsAction
         if (!pm_Settings::get('virustotal_enabled')) {
             $this->_forward('settings');
             return;
         }
 
-        $list = $this->_getDomainsReportList();
-        //var_dump($list);
-        // List object for pm_View_Helper_RenderList
-        $this->view->list = new pm_View_List_Simple($this->view, $this->_request, []);
+        $this->view->list = $this->_getDomainsReportList();
 
     }
     
     public function settingsAction() 
     {
-        $this->view->help_tip = "You can obtain API key after register on <a target='_blank' href='https://virustotal.com/'>https://virustotal.com/</a>";
+        $this->view->help_tip = $this->lmsg('apikey_help');
         $this->view->debug = print_r(json_encode($this->_getDomainsReportList()), 1);
-        // Init form here
+
         $form = new pm_Form_Simple();
 
         $form->addElement('checkbox', 'virustotal_enabled', [
@@ -65,7 +60,6 @@ class IndexController extends pm_Controller_Action
         $form->addElement('text', 'virustotal_api_key', [
             'label' => 'VirusTotal API key',
             'value' => pm_Settings::get('virustotal_api_key'),
-            'description' => 'You can obtain API key after register on <a target="_blank" href="https://virustotal.com/">https://virustotal.com/</a>',
             'required' => true,
             'validators' => [
                 ['NotEmpty', true],
@@ -77,7 +71,7 @@ class IndexController extends pm_Controller_Action
         ]);
 
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
-            // Form proccessing here
+
             pm_Settings::set('virustotal_enabled', $form->getValue('virustotal_enabled'));
             pm_Settings::set('virustotal_api_key', $form->getValue('virustotal_api_key'));
 
@@ -90,7 +84,52 @@ class IndexController extends pm_Controller_Action
     
     private function _getDomainsReportList() 
     {
-        return Modules_PleskExtensionsVirustotal_Helper::getDomains();
+        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
+        $i = 0;
+        $data = [];
+        foreach ($admin_report['domains'] as $domain) {
+            $i++;
+            
+            $data[$i] = [
+                'column-1' => $i,
+                'column-2' => $domain['domain']['name'],
+                'column-3' => $domain['virustotal_positives'] . ' / ' . $domain['virustotal_total'],
+                'column-4' => '<a target="_blank" href="' . $domain['virustotal_domain_info_url'] . '">VirusTotal Report</a>',
+            ];
+        }
+        
+        $options = [
+            'defaultSortField' => 'column-1',
+            'defaultSortDirection' => pm_View_List_Simple::SORT_DIR_DOWN,
+        ];
+        $list = new pm_View_List_Simple($this->view, $this->_request, $options);
+        $list->setData($data);
+        $list->setColumns([
+            pm_View_List_Simple::COLUMN_SELECTION,
+            'column-1' => [
+                'title' => '#',
+                'noEscape' => true,
+                'searchable' => true,
+            ],
+            'column-2' => [
+                'title' => $this->lmsg('domain'),
+                'noEscape' => true,
+                'sortable' => false,
+            ],
+            'column-3' => [
+                'title' => $this->lmsg('positives'),
+                'noEscape' => true,
+                'sortable' => false,
+            ],
+            'column-4' => [
+                'title' => $this->lmsg('reportLink'),
+                'noEscape' => true,
+                'sortable' => false,
+            ],
+        ]);
+
+        $list->setDataUrl(['action' => 'report']);
+        return $list;
     }
 
 }

@@ -32,6 +32,7 @@ class Modules_PleskExtensionsVirustotal_Helper
             );
 
             pm_Settings::set('domain_id_' . $domain->id, json_encode($virustotal_request));
+            pm_Settings::set('last_scan', date("d/M/Y G:i"));
         }
     }
 
@@ -66,10 +67,17 @@ class Modules_PleskExtensionsVirustotal_Helper
     {
         $admin_report = json_decode(pm_Settings::get('admin_report'), true);
         if (!is_array($admin_report)) {
-            $admin_report = array();
+            $admin_report = array(
+                'new_reports' => 0,
+                'domains' => []
+            );
         }
 
-        $admin_report[] = array(
+        if (!isset($admin_report['domains'][$domain->ascii_name])) {
+            $admin_report['new_reports']++;
+        }
+
+        $admin_report['domains'][$domain->ascii_name] = array(
             'domain' => $domain,
             'virustotal_domain_info_url' => sprintf(self::virustotal_domain_info_url, $domain->ascii_name),
             'virustotal_positives' => $report['positives'],

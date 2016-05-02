@@ -13,3 +13,5 @@ try {
 } catch (pm_Exception $e) {
     echo $e->getMessage();
 }
+
+pm_Settings::clean();

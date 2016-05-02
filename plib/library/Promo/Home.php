@@ -10,7 +10,13 @@ class Modules_PleskExtensionsVirustotal_Promo_Home extends pm_Promo_AdminHome
     public function getText()
     {
         pm_Context::init('plesk-extensions-virustotal');
-        $text = (string)pm_Settings::get('promo_text');
+        $text = false;
+        
+        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
+        if ($admin_report) {
+            $text = $this->lmsg('newReports') . $admin_report['new_reports'] . ', ' . $this->lmsg('lastScan') . pm_Settings::get('last_scan');    
+        }
+        
         return $text ? $text : $this->lmsg('noReports');
     }
     public function getButtonText()
