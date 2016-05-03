@@ -2,13 +2,14 @@
 
 class Modules_PleskExtensionsVirustotal_PleskDomain
 {
-    function __construct($id, $name, $ascii_name, $status, $dns_ip_address, $htype) {
+    function __construct($id, $name, $ascii_name, $status, $dns_ip_address, $htype, $webspace_id) {
         $this->id = $id;
         $this->name = $name;
         $this->ascii_name = $ascii_name;
         $this->status = $status;
         $this->dns_ip_address = $dns_ip_address;
         $this->htype = $htype;
+        $this->webspace_id  = $webspace_id ? $webspace_id : $id;
     }
     
     /**
@@ -51,7 +52,6 @@ class Modules_PleskExtensionsVirustotal_PleskDomain
         }
         return false;
     }
-
 
     /**
      * @return bool

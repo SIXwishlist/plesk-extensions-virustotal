@@ -8,7 +8,9 @@ $messages = array(
     'apikey_help' => 'You can obtain API key after register on <a target=\'_blank\' href=\'https://virustotal.com/\'>https://virustotal.com/</a>',
     'virustotalPromoTitle' => 'VirusTotal Reports',
     'virustotalPromoButtonTitle' => 'Show',
-    'noReports' => 'Information is not available.',
+    'scanningWasNotPerformedYet' => 'Scanning was not performed yet.',
+    'totalDomains' => 'Total domains checked: ',
+    'ofTotalDomains' => ' of total domains checked ',
     'totalReports' => 'Total "bad" reports: ',
     'lastScan' => 'last scan at ',
 );

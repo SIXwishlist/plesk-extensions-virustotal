@@ -10,6 +10,8 @@ class Modules_PleskExtensionsVirustotal_Helper
 
     public static  function check()
     {
+        pm_Settings::set('total_domains_checked', 0);
+        
         if (!pm_Settings::get('virustotal_enabled') || !pm_Settings::get('virustotal_api_key')) {
             return;
         }
@@ -43,6 +45,7 @@ class Modules_PleskExtensionsVirustotal_Helper
 
             pm_Settings::set('domain_id_' . $domain->id, json_encode($virustotal_request));
             pm_Settings::set('last_scan', date("d/M/Y G:i"));
+            pm_Settings::set('total_domains_checked', pm_Settings::get('total_domains_checked') + 1);
         }
 
         self::cleanup_last_domains();
@@ -100,6 +103,7 @@ class Modules_PleskExtensionsVirustotal_Helper
             }
 
             $report = self::virustotal_scan_url_report($domain->ascii_name);
+            //error_log(print_r($report, 1));
             if (isset($report['positives'])) {
                 $request['virustotal_request_done'] = true;
                 $request['virustotal_report_positives'] = $report['positives'];
@@ -120,7 +124,7 @@ class Modules_PleskExtensionsVirustotal_Helper
     {
         $ops = ['report', 'check'];
         foreach ($ops as $operation) {
-            pm_Settings::set('last_domain_' . $operation, null);
+            pm_Settings::set('last_domain_' . $operation, false);
         }
     }
 
@@ -248,7 +252,8 @@ class Modules_PleskExtensionsVirustotal_Helper
                 $domain->data->gen_info->{'ascii-name'},
                 $domain->data->gen_info->status,
                 is_array($domain->data->gen_info->dns_ip_address) ? $domain->data->gen_info->dns_ip_address : array($domain->data->gen_info->dns_ip_address),
-                $domain->data->gen_info->htype
+                $domain->data->gen_info->htype,
+                $domain->data->gen_info->{'webspace-id'}
             );
         }
 

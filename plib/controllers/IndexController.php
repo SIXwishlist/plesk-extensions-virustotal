@@ -40,7 +40,7 @@ class IndexController extends pm_Controller_Action
             $this->_forward('settings');
             return;
         }
-
+        $this->view->summary = $this->_getReportSummary();
         $this->view->list = $this->_getDomainsReportList();
 
     }
@@ -82,6 +82,27 @@ class IndexController extends pm_Controller_Action
         $this->view->form = $form;
     }
     
+    private function _getReportSummary()
+    {
+        $total_domains = (int)pm_Settings::get('total_domains_checked');
+        $last_scan = pm_Settings::get('last_scan');
+
+        if ($last_scan) {
+            $text = $this->lmsg('totalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
+        } else {
+            $text = $this->lmsg('scanningWasNotPerformedYet');
+        }
+
+        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
+        if ($admin_report) {
+            $text = $this->lmsg('totalReports') . count($admin_report['domains']) . $this->lmsg('ofTotalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
+        }
+
+        pm_Settings::set('report_summary', $text);
+
+        return $text;
+    }
+    
     private function _getDomainsReportList() 
     {
         $admin_report = json_decode(pm_Settings::get('admin_report'), true);
@@ -92,7 +113,7 @@ class IndexController extends pm_Controller_Action
             
             $data[$i] = [
                 'column-1' => $i,
-                'column-2' => $domain['domain']['name'],
+                'column-2' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain['domain']['webspace_id'] . '?pageUrl=/web/overview/id/d:' . $domain['domain']['id'] . '">' . $domain['domain']['name'] . '</a>',
                 'column-3' => $domain['virustotal_positives'] . ' / ' . $domain['virustotal_total'],
                 'column-4' => '<a target="_blank" href="' . $domain['virustotal_domain_info_url'] . '">VirusTotal Report</a>',
             ];
