@@ -1,7 +1,7 @@
 <?php
 
 $messages = array(
-    'pageTitle' => 'VirusTotal Checker',
+    'pageTitle' => 'VirusTotal Site Checker',
     'domain' => 'Domain',
     'positives' => 'Positives',
     'reportLink' => 'Report Link',

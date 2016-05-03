@@ -1,6 +1,6 @@
 <?php
 
-class Modules_PleskExtensionsVirustotal_Helper
+class Modules_VirustotalSiteChecker_Helper
 {
     const virustotal_scan_url = 'https://www.virustotal.com/vtapi/v2/url/scan';
     const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
@@ -32,11 +32,11 @@ class Modules_PleskExtensionsVirustotal_Helper
             if ($request && !$request['virustotal_request_done']) {
                 continue;
             }
-            /*
+            
             if (!$domain->isValid()) {
                 continue;
             }
-            */
+            
             $virustotal_request = array(
                 'domain' => $domain,
                 'virustotal_request_done' => false,
@@ -68,7 +68,7 @@ class Modules_PleskExtensionsVirustotal_Helper
 
     /**
      * @param  $operation string
-     * @param  $domain Modules_PleskExtensionsVirustotal_PleskDomain
+     * @param  $domain Modules_VirustotalSiteChecker_PleskDomain
      * @return bool
      */
     public static function is_last_domain($operation, $domain)
@@ -150,7 +150,7 @@ class Modules_PleskExtensionsVirustotal_Helper
     }
 
     /**
-     * @param $domain Modules_PleskExtensionsVirustotal_PleskDomain
+     * @param $domain Modules_VirustotalSiteChecker_PleskDomain
      * @return null
      */
     public static function unreport_domain($domain)
@@ -165,7 +165,7 @@ class Modules_PleskExtensionsVirustotal_Helper
     }
 
     /**
-     * @param $domain Modules_PleskExtensionsVirustotal_PleskDomain
+     * @param $domain Modules_VirustotalSiteChecker_PleskDomain
      * @param $report array
      * @return null
      */
@@ -222,7 +222,7 @@ class Modules_PleskExtensionsVirustotal_Helper
     }
 
     /**
-     * @return Modules_PleskExtensionsVirustotal_PleskDomain[]
+     * @return Modules_VirustotalSiteChecker_PleskDomain[]
      */
     public static function getDomains()
     {
@@ -246,7 +246,7 @@ class Modules_PleskExtensionsVirustotal_Helper
         $tmp_list = array_merge($sites_array, $websp_array);
         foreach ($tmp_list as $domain) {
 
-            $domains[$domain->id] = new Modules_PleskExtensionsVirustotal_PleskDomain(
+            $domains[$domain->id] = new Modules_VirustotalSiteChecker_PleskDomain(
                 $domain->id,
                 $domain->data->gen_info->name,
                 $domain->data->gen_info->{'ascii-name'},

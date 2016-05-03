@@ -1,6 +1,6 @@
 <?php
 
-class Modules_PleskExtensionsVirustotal_Promo_Home extends pm_Promo_AdminHome
+class Modules_VirustotalSiteChecker_Promo_Home extends pm_Promo_AdminHome
 {
     public function getTitle()
     {

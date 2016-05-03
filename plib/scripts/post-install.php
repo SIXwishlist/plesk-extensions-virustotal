@@ -15,4 +15,3 @@ $task->setCmd('virustotal-periodic-task.php');
 pm_Scheduler::getInstance()->putTask($task);
 pm_Settings::set('virustotal_periodic_task_id', $task->getId());
 
-Modules_PleskExtensionsVirustotal_Helper::check();

@@ -2,4 +2,4 @@
 
 pm_Context::init('virustotal-site-checker');
 
-Modules_PleskExtensionsVirustotal_Helper::check();
+Modules_VirustotalSiteChecker_Helper::check();

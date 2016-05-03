@@ -1,6 +1,6 @@
 <?php
 
-class Modules_PleskExtensionsVirustotal_PleskDomain
+class Modules_VirustotalSiteChecker_PleskDomain
 {
     function __construct($id, $name, $ascii_name, $status, $dns_ip_address, $htype, $webspace_id) {
         $this->id = $id;

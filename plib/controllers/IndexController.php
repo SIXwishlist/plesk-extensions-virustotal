@@ -52,7 +52,6 @@ class IndexController extends pm_Controller_Action
     public function settingsAction() 
     {
         $this->view->help_tip = $this->lmsg('apikey_help');
-        $this->view->debug = print_r(json_encode($this->_getDomainsReportList()), 1);
 
         $form = new pm_Form_Simple();
 
@@ -120,6 +119,9 @@ class IndexController extends pm_Controller_Action
     private function _getDomainsReportList() 
     {
         $admin_report = json_decode(pm_Settings::get('admin_report'), true);
+        if (!$admin_report) {
+            return new pm_View_List_Simple($this->view, $this->_request);
+        }
         $i = 0;
         $data = [];
         foreach ($admin_report['domains'] as $domain) {
