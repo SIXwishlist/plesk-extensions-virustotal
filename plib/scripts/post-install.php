@@ -1,6 +1,6 @@
 <?php
 
-pm_Context::init('plesk-extensions-virustotal');
+pm_Context::init('virustotal-site-checker');
 
 $tasks = pm_Scheduler::getInstance()->listTasks();
 foreach ($tasks as $task) {

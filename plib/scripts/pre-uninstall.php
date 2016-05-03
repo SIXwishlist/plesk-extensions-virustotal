@@ -1,6 +1,6 @@
 <?php
 
-pm_Context::init('plesk-extensions-virustotal');
+pm_Context::init('virustotal-site-checker');
 
 $taskId = pm_Settings::get('virustotal_periodic_task_id');
 if (!$taskId) {

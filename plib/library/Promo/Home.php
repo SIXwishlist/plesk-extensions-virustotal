@@ -4,12 +4,12 @@ class Modules_PleskExtensionsVirustotal_Promo_Home extends pm_Promo_AdminHome
 {
     public function getTitle()
     {
-        pm_Context::init('plesk-extensions-virustotal');
+        pm_Context::init('virustotal-site-checker');
         return $this->lmsg('virustotalPromoTitle');
     }
     public function getText()
     {
-        pm_Context::init('plesk-extensions-virustotal');
+        pm_Context::init('virustotal-site-checker');
 
         $total_domains = (int)pm_Settings::get('total_domains_checked');
         $last_scan = pm_Settings::get('last_scan');
@@ -31,17 +31,17 @@ class Modules_PleskExtensionsVirustotal_Promo_Home extends pm_Promo_AdminHome
     }
     public function getButtonText()
     {
-        pm_Context::init('plesk-extensions-virustotal');
+        pm_Context::init('virustotal-site-checker');
         return $this->lmsg('virustotalPromoButtonTitle');
     }
     public function getButtonUrl()
     {
-        pm_Context::init('plesk-extensions-virustotal');
+        pm_Context::init('virustotal-site-checker');
         return pm_Context::getBaseUrl();
     }
     public function getIconUrl()
     {
-        pm_Context::init('plesk-extensions-virustotal');
+        pm_Context::init('virustotal-site-checker');
         return pm_Context::getBaseUrl() . '/images/virus-total.png';
     }
 }
