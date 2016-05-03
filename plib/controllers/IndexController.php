@@ -21,6 +21,10 @@ class IndexController extends pm_Controller_Action
                 'title' => 'Settings',
                 'action' => 'settings',
             ],
+            [
+                'title' => 'About',
+                'action' => 'about',
+            ],
         ];
     }
 
@@ -80,6 +84,16 @@ class IndexController extends pm_Controller_Action
         }
 
         $this->view->form = $form;
+    }
+
+    public function aboutAction()
+    {
+        $this->view->about = $this->lmsg('about');
+        $this->view->feedback = $this->lmsg('feedback');
+        $this->view->faq = $this->lmsg('faq');
+        $this->view->question1 = $this->lmsg('question1');
+        $this->view->question2 = $this->lmsg('question2');
+        $this->view->question3 = $this->lmsg('question3', ['image' => pm_Context::getBaseUrl() . '/images/faq-3.png']);
     }
     
     private function _getReportSummary()
