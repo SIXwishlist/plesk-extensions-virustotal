@@ -158,7 +158,7 @@ class IndexController extends pm_Controller_Action
                 'sortable' => false,
             ],
             'column-3' => [
-                'title' => $this->lmsg('positives'),
+                'title' => $this->lmsg('checkResult'),
                 'noEscape' => true,
                 'sortable' => false,
             ],
