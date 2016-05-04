@@ -8,6 +8,8 @@ class IndexController extends pm_Controller_Action
     {
         parent::init();
 
+        $this->view->pageTitle = $this->lmsg('pageTitle');
+        
         $this->view->tabs = [
             [
                 'title' => 'Report',
@@ -52,17 +54,22 @@ class IndexController extends pm_Controller_Action
         $form = new pm_Form_Simple();
 
         $form->addElement('checkbox', 'virustotal_enabled', [
-            'label' => 'Virustotal Enabled',
+            'label' => $this->lmsg('virustotalEnabled'),
             'value' => pm_Settings::get('virustotal_enabled'),
         ]);
 
         $form->addElement('text', 'virustotal_api_key', [
-            'label' => 'VirusTotal API key',
+            'label' => $this->lmsg('virustotalPublicApiKey'),
             'value' => pm_Settings::get('virustotal_api_key'),
             'required' => true,
             'validators' => [
                 ['NotEmpty', true],
             ],
+        ]);
+
+        $form->addElement('checkbox', '_promo_admin_home', [
+            'label' => $this->lmsg('adminHomeWidgetEnabled'),
+            'value' => pm_Settings::get('_promo_admin_home'),
         ]);
 
         $form->addControlButtons([
@@ -73,8 +80,9 @@ class IndexController extends pm_Controller_Action
 
             pm_Settings::set('virustotal_enabled', $form->getValue('virustotal_enabled'));
             pm_Settings::set('virustotal_api_key', $form->getValue('virustotal_api_key'));
-
-            $this->_status->addMessage('info', 'Settings was successfully saved.');
+            pm_Settings::set('_promo_admin_home', $form->getValue('_promo_admin_home'));
+            
+            $this->_status->addMessage('info', $this->lmsg('settingsWasSuccessfullySaved'));
             $this->_helper->json(['redirect' => pm_Context::getBaseUrl()]);
         }
 
@@ -127,7 +135,7 @@ class IndexController extends pm_Controller_Action
                 'column-1' => $i,
                 'column-2' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain['domain']['webspace_id'] . '?pageUrl=/web/overview/id/d:' . $domain['domain']['id'] . '">' . $domain['domain']['name'] . '</a>',
                 'column-3' => $domain['virustotal_positives'] . ' / ' . $domain['virustotal_total'],
-                'column-4' => '<a rel="noopener noreferrer" target="_blank" href="' . $domain['virustotal_domain_info_url'] . '">VirusTotal Report</a>',
+                'column-4' => '<a rel="noopener noreferrer" target="_blank" href="' . $domain['virustotal_domain_info_url'] . '">' .  $this->lmsg('virustotalReport') . '</a>',
             ];
         }
         

@@ -2,6 +2,8 @@
 
 pm_Context::init('virustotal-site-checker');
 
+pm_Settings::set('_promo_admin_home', 1);
+
 $tasks = pm_Scheduler::getInstance()->listTasks();
 foreach ($tasks as $task) {
     if ('virustotal-periodic-task.php' == $task->getCmd()) {

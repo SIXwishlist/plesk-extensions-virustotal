@@ -2,9 +2,14 @@
 
 $messages = array(
     'pageTitle' => 'VirusTotal Site Checker',
+    'virustotalEnabled' => 'VirusTotal включен',
+    'virustotalPublicApiKey' => 'Публичный API ключ VirusTotal',
+    'adminHomeWidgetEnabled' => 'Виджет на домашней странице администратора включен',
+    'settingsWasSuccessfullySaved' => 'Настройки были сохранены.',
     'domain' => 'Домен',
     'positives' => 'Срабатывания',
     'reportLink' => 'Сслыка на отчет',
+    'virustotalReport' => 'Отчет VirusTotal',
     'apikey_help' => 'Вы можете получить API-ключ после регистрации на <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>https://virustotal.com/</a>',
     'virustotalPromoTitle' => 'Отчеты VirusTotal',
     'virustotalPromoButtonTitle' => 'Подробнее',
