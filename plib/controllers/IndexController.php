@@ -131,7 +131,7 @@ class IndexController extends pm_Controller_Action
                 'column-1' => $i,
                 'column-2' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain['domain']['webspace_id'] . '?pageUrl=/web/overview/id/d:' . $domain['domain']['id'] . '">' . $domain['domain']['name'] . '</a>',
                 'column-3' => $domain['virustotal_positives'] . ' / ' . $domain['virustotal_total'],
-                'column-4' => '<a target="_blank" href="' . $domain['virustotal_domain_info_url'] . '">VirusTotal Report</a>',
+                'column-4' => '<a rel="noopener noreferrer" target="_blank" href="' . $domain['virustotal_domain_info_url'] . '">VirusTotal Report</a>',
             ];
         }
         
