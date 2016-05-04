@@ -253,7 +253,7 @@ class Modules_VirustotalSiteChecker_Helper
                 $domain->data->gen_info->status,
                 is_array($domain->data->gen_info->dns_ip_address) ? $domain->data->gen_info->dns_ip_address : array($domain->data->gen_info->dns_ip_address),
                 $domain->data->gen_info->htype,
-                $domain->data->gen_info->{'webspace-id'}
+                isset($domain->data->gen_info->{'webspace-id'}) ? $domain->data->gen_info->{'webspace-id'} : $domain->id
             );
         }
 
