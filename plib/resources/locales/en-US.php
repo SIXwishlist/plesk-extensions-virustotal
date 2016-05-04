@@ -5,7 +5,7 @@ $messages = array(
     'domain' => 'Domain',
     'positives' => 'Positives',
     'reportLink' => 'Report Link',
-    'apikey_help' => 'You can obtain API key after register on <a target=\'_blank\' href=\'https://virustotal.com/\'>https://virustotal.com/</a>',
+    'apikey_help' => 'You can obtain API key after register on <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>https://virustotal.com/</a>',
     'virustotalPromoTitle' => 'VirusTotal Reports',
     'virustotalPromoButtonTitle' => 'Show',
     'scanningWasNotPerformedYet' => 'Scanning was not performed yet.',
