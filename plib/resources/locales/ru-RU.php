@@ -3,7 +3,7 @@
 $messages = array(
     'pageTitle' => 'VirusTotal Site Checker',
     'virustotalEnabled' => 'VirusTotal включен',
-    'virustotalPublicApiKey' => 'Публичный API ключ VirusTotal',
+    'virustotalPublicApiKey' => 'Публичный API-ключ VirusTotal',
     'adminHomeWidgetEnabled' => 'Виджет на домашней странице администратора включен',
     'settingsWasSuccessfullySaved' => 'Настройки были сохранены.',
     'domain' => 'Домен',
