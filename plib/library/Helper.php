@@ -6,7 +6,7 @@ class Modules_VirustotalSiteChecker_Helper
     const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
     const virustotal_domain_info_url = 'https://www.virustotal.com/domain/%s/information/';
     const virustotal_api_timeout = 20;
-    const virustotal_api_day_limit = 5;
+    const virustotal_api_day_limit = 4320;
 
     public static  function check()
     {

@@ -18,10 +18,9 @@ $messages = array(
     'ofTotalDomains' => ' of all domains selected for scanning ',
     'totalReports' => 'Total "bad" domains: ',
     'lastScan' => 'last scanning performed on ',
-    'about' => 'This extension uses the public API  https://virustotal.com to detect malicious scripts on your sites. Queries are executed through daily scheduled tasks at <a href="/admin/scheduler/tasks-list">Scheduled Tasks</a>',
+    'about' => 'This extension uses the public API <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>virustotal.com</a> to detect malicious scripts on your sites. API requests are executed through daily scheduled tasks at <a href="/admin/scheduler/tasks-list">Scheduled Tasks</a>',
     'feedback' => 'Submit any questions to <a rel="noopener noreferrer" target="_blank" href="http://serverfault.com/questions/ask?tags=plesk+virustotal">serverfault.com</a> using the tags "plesk" and "virustotal"',
     'faq' => 'FAQ',
     'question1' => '<p><b>Q: Why aren\'t there notifications by e-mail?</b><br />A: We have no way of knowing that e-mails will reach your inbox.</p>',
     'question2' => '<p><b>Q: Why do the daily scheduled tasks take so long?</b><br />A: Because of the limitations of the public VirusTotal API the extension sends the API requests at the speed of 3 domains per minute.</p>',
-    'question3' => '<p><b>Q: How do "negative" reports look?</b><br />A: <img src="%%image%%" /></p>'
 );

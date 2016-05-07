@@ -96,7 +96,6 @@ class IndexController extends pm_Controller_Action
         $this->view->faq = $this->lmsg('faq');
         $this->view->question1 = $this->lmsg('question1');
         $this->view->question2 = $this->lmsg('question2');
-        $this->view->question3 = $this->lmsg('question3', ['image' => pm_Context::getBaseUrl() . '/images/faq-3.png']);
     }
     
     private function _getReportSummary()

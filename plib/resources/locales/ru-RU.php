@@ -3,7 +3,7 @@
 $messages = array(
     'pageTitle' => 'VirusTotal Site Checker',
     'virustotalEnabled' => 'VirusTotal включен',
-    'virustotalPublicApiKey' => 'Публичный API-ключ VirusTotal',
+    'virustotalPublicApiKey' => 'Публичный API ключ VirusTotal',
     'adminHomeWidgetEnabled' => 'Виджет на домашней странице администратора включен',
     'settingsWasSuccessfullySaved' => 'Настройки были сохранены.',
     'domain' => 'Домен',
@@ -18,7 +18,7 @@ $messages = array(
     'ofTotalDomains' => ' из всего проверенных доменов ',
     'totalReports' => 'Всего "плохих" отчетов: ',
     'lastScan' => 'последнее сканирование выполнено в ',
-    'about' => 'Это расширение использует публичное API https://virustotal.com, чтобы проверить Ваши сайты на вредоносные скрипты. Запросы выполняются через ежедневную задачу, которую Вы можете найти в <a href="/admin/scheduler/tasks-list">Scheduled Tasks</a>',
+    'about' => 'Это расширение использует публичное API <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>virustotal.com</a>, чтобы проверить Ваши сайты на вредоносные скрипты. Запросы выполняются через ежедневную задачу, которую Вы можете найти в <a href="/admin/scheduler/tasks-list">Scheduled Tasks</a>',
     'feedback' => 'Если у Вас есть вопросы Вы можете задать их на <a rel="noopener noreferrer" target="_blank" href="http://serverfault.com/questions/ask?tags=plesk+virustotal">serverfault.com</a> c тегами "plesk" и "virustotal"',
     'faq' => 'FAQ',
     'question1' => '<p><b>Q: Почему нет нотификации по e-mail?</b><br />A: Нет никаких гарантий, что сообщение электронной почты попадет к Вам в ящик.</p>',
