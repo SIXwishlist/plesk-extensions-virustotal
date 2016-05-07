@@ -6,44 +6,50 @@ class Modules_VirustotalSiteChecker_Helper
     const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
     const virustotal_domain_info_url = 'https://www.virustotal.com/domain/%s/information/';
     const virustotal_api_timeout = 20;
-    const virustotal_api_day_limit = 4300;
+    const virustotal_api_day_limit = 5;
 
     public static  function check()
     {
-        pm_Settings::set('total_domains_checked', 0);
+        
         
         if (!pm_Settings::get('virustotal_enabled') || !pm_Settings::get('virustotal_api_key')) {
             return;
         }
 
-        self::cleanup_admin_report();
         self::report();
-
+        
+        pm_Settings::set('total_domains_checked', 0);
         foreach (self::getDomains() as $domain) {
             if (!self::is_last_domain('check', $domain)) {
                 continue;
             }
-            if (self::is_enough()) {
-                exit(0);
-            }
             
-            
-            $request = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
-            if ($request && !$request['virustotal_request_done']) {
+            $report = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
+            if ($report && !$report['virustotal_request_done']) {
                 continue;
             }
-            
+            if (!$report) {
+                $report = [];
+            }
+            /*
             if (!$domain->isValid()) {
                 continue;
             }
-            
-            $virustotal_request = array(
-                'domain' => $domain,
-                'virustotal_request_done' => false,
-                'virustotal_request' => self::virustotal_scan_url_request($domain->ascii_name)
+            */
+            if (self::is_enough()) {
+                exit(0);
+            }
+            $report['domain'] = $domain;
+            $report['virustotal_request_done'] = false;
+            $request = self::virustotal_scan_url_request($domain->ascii_name);
+            $report['virustotal_request'] = array(
+                'response_code' => $request['response_code'],
+                'scan_date' => $request['scan_date'],
+                'scan_id' => $request['scan_id'],
             );
 
-            pm_Settings::set('domain_id_' . $domain->id, json_encode($virustotal_request));
+
+            pm_Settings::set('domain_id_' . $domain->id, json_encode($report));
             pm_Settings::set('last_scan', date("d/M/Y G:i"));
             pm_Settings::set('total_domains_checked', pm_Settings::get('total_domains_checked') + 1);
         }
@@ -93,15 +99,13 @@ class Modules_VirustotalSiteChecker_Helper
             if (!self::is_last_domain('report', $domain)) {
                 continue;
             }
-            if (self::is_enough()) {
-                exit(0);
-            }
-
             $request = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
             if (!$request) {
                 continue;
             }
-
+            if (self::is_enough()) {
+                exit(0);
+            }
             $report = self::virustotal_scan_url_report($domain->ascii_name);
             //error_log(print_r($report, 1));
             if (isset($report['positives'])) {
@@ -116,8 +120,6 @@ class Modules_VirustotalSiteChecker_Helper
                 }
             }
         }
-
-        self::cleanup_last_domains();
     }
 
     public static function cleanup_last_domains()
@@ -128,65 +130,43 @@ class Modules_VirustotalSiteChecker_Helper
         }
     }
 
-    public static function cleanup_admin_report()
-    {
-        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
-        if (!is_array($admin_report)) {
-            return;
-        }
-
-        $to_delete = [];
-        $domains = self::getDomains();
-        foreach ($admin_report['domains'] as $key => $report) {
-            if (!isset($domains[$report['domain']['id']])) {
-                $to_delete[] = $key;
-            }
-        }
-        foreach ($to_delete as $key) {
-            unset($admin_report['domains'][$key]);
-        }
-
-        pm_Settings::set('admin_report', json_encode($admin_report));
-    }
-
     /**
      * @param $domain Modules_VirustotalSiteChecker_PleskDomain
      * @return null
      */
     public static function unreport_domain($domain)
     {
-        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
-        if (!is_array($admin_report)) {
+        $report = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
+        if (!$report) {
             return;
         }
+        unset($report['virustotal_domain_info_url']);
+        unset($report['virustotal_positives']);
+        unset($report['virustotal_total']);
+        unset($report['virustotal_scan_date']);
 
-        unset($admin_report['domains'][$domain->ascii_name]);
-        pm_Settings::set('admin_report', json_encode($admin_report));
+        pm_Settings::set('domain_id_' . $domain->id, json_encode($report));
     }
 
     /**
      * @param $domain Modules_VirustotalSiteChecker_PleskDomain
-     * @param $report array
+     * @param $new_report array
      * @return null
      */
-    public static function report_domain($domain, $report)
+    public static function report_domain($domain, $new_report)
     {
-        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
-        if (!is_array($admin_report)) {
-            $admin_report = array(
-                'domains' => []
-            );
+        $report = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
+        if (!$report) {
+            $report = [];
         }
 
-        $admin_report['domains'][$domain->ascii_name] = array(
-            'domain' => $domain,
-            'virustotal_domain_info_url' => sprintf(self::virustotal_domain_info_url, $domain->ascii_name),
-            'virustotal_positives' => $report['positives'],
-            'virustotal_total' => isset($report['total']) ? $report['total'] : '',
-            'virustotal_scan_date' => isset($report['scan_date']) ? $report['total'] : ''
-        );
+        $report['domain'] = $domain;
+        $report['virustotal_domain_info_url'] = sprintf(self::virustotal_domain_info_url, $domain->ascii_name);
+        $report['virustotal_positives'] = $new_report['positives'];
+        $report['virustotal_total'] = isset($new_report['total']) ? $new_report['total'] : '';
+        $report['virustotal_scan_date'] = isset($new_report['scan_date']) ? $new_report['total'] : '';
 
-        pm_Settings::set('admin_report', json_encode($admin_report));
+        pm_Settings::set('domain_id_' . $domain->id, json_encode($report));
     }
 
     /**
@@ -219,6 +199,43 @@ class Modules_VirustotalSiteChecker_Helper
         $response = $client->request(Zend_Http_Client::POST);
 
         return json_decode($response->getBody(), true);
+    }
+
+    /**
+     * @return array[string]
+     *              ['bad']     Modules_VirustotalSiteChecker_PleskDomain[]
+     *              ['total']   int
+     */
+    public static function getDomainsReport()
+    {
+        static $domains = [
+            'bad' => [],
+            'total' => 0,
+        ];
+        if ($domains['total'] > 0) {
+            return $domains;
+        }
+        foreach (self::getDomains() as $domain) {
+            $report = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
+            if (!$report) {
+                continue;
+            }
+
+            $domains['total']++;
+
+            if (!isset($report['virustotal_positives']) || $report['virustotal_positives'] <= 0) {
+                continue;
+            }
+
+            $domain->virustotal_positives = $report['virustotal_positives'];
+            $domain->virustotal_total = $report['virustotal_total'];
+            $domain->virustotal_domain_info_url = $report['virustotal_domain_info_url'];
+
+            $domains['bad'][$domain->id] = $domain;
+
+        }
+        
+        return $domains;
     }
 
     /**

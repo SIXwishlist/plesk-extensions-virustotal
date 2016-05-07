@@ -101,7 +101,9 @@ class IndexController extends pm_Controller_Action
     
     private function _getReportSummary()
     {
-        $total_domains = (int)pm_Settings::get('total_domains_checked');
+        $report = Modules_VirustotalSiteChecker_Helper::getDomainsReport();
+                
+        $total_domains = $report['total'];
         $last_scan = pm_Settings::get('last_scan');
 
         if ($last_scan) {
@@ -109,10 +111,9 @@ class IndexController extends pm_Controller_Action
         } else {
             $text = $this->lmsg('scanningWasNotPerformedYet');
         }
-
-        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
-        if ($admin_report) {
-            $text = $this->lmsg('totalReports') . count($admin_report['domains']) . $this->lmsg('ofTotalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
+        
+        if (count($report['bad']) > 0) {
+            $text = $this->lmsg('totalReports') . count($report['bad']) . $this->lmsg('ofTotalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
         }
 
         pm_Settings::set('report_summary', $text);
@@ -122,21 +123,22 @@ class IndexController extends pm_Controller_Action
     
     private function _getDomainsReportList() 
     {
-        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
-        if (!$admin_report) {
-            return new pm_View_List_Simple($this->view, $this->_request);
-        }
         $i = 0;
         $data = [];
-        foreach ($admin_report['domains'] as $domain) {
+        $report = Modules_VirustotalSiteChecker_Helper::getDomainsReport();
+        foreach ($report['bad'] as $domain) {
             $i++;
-            
+
             $data[$i] = [
                 'column-1' => $i,
-                'column-2' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain['domain']['webspace_id'] . '?pageUrl=/web/overview/id/d:' . $domain['domain']['id'] . '">' . $domain['domain']['name'] . '</a>',
-                'column-3' => $domain['virustotal_positives'] . ' / ' . $domain['virustotal_total'],
-                'column-4' => '<a rel="noopener noreferrer" target="_blank" href="' . $domain['virustotal_domain_info_url'] . '">' .  $this->lmsg('virustotalReport') . '</a>',
+                'column-2' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain->webspace_id . '?pageUrl=/web/overview/id/d:' . $domain->id . '">' . $domain->name . '</a>',
+                'column-3' => $domain->virustotal_positives . ' / ' . $domain->virustotal_total,
+                'column-4' => '<a rel="noopener noreferrer" target="_blank" href="' . $domain->virustotal_domain_info_url . '">' .  $this->lmsg('virustotalReport') . '</a>',
             ];
+        }
+        
+        if (!count($data) > 0) {
+            return new pm_View_List_Simple($this->view, $this->_request);
         }
         
         $options = [

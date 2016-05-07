@@ -11,7 +11,9 @@ class Modules_VirustotalSiteChecker_Promo_Home extends pm_Promo_AdminHome
     {
         pm_Context::init('virustotal-site-checker');
 
-        $total_domains = (int)pm_Settings::get('total_domains_checked');
+        $report = Modules_VirustotalSiteChecker_Helper::getDomainsReport();
+
+        $total_domains = $report['total'];
         $last_scan = pm_Settings::get('last_scan');
 
         if ($last_scan) {
@@ -20,11 +22,9 @@ class Modules_VirustotalSiteChecker_Promo_Home extends pm_Promo_AdminHome
             $text = $this->lmsg('scanningWasNotPerformedYet');
         }
 
-        $admin_report = json_decode(pm_Settings::get('admin_report'), true);
-        if ($admin_report) {
-            $text = $this->lmsg('totalReports') . count($admin_report['domains']) . $this->lmsg('ofTotalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
+        if (count($report['bad']) > 0) {
+            $text = $this->lmsg('totalReports') . count($report['bad']) . $this->lmsg('ofTotalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
         }
-
         pm_Settings::set('report_summary', $text);
 
         return $text;
