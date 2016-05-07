@@ -18,7 +18,6 @@ class Modules_VirustotalSiteChecker_Helper
 
         self::report();
         
-        pm_Settings::set('total_domains_checked', 0);
         foreach (self::getDomains() as $domain) {
             if (!self::is_last_domain('check', $domain)) {
                 continue;
@@ -51,7 +50,6 @@ class Modules_VirustotalSiteChecker_Helper
 
             pm_Settings::set('domain_id_' . $domain->id, json_encode($report));
             pm_Settings::set('last_scan', date("d/M/Y G:i"));
-            pm_Settings::set('total_domains_checked', pm_Settings::get('total_domains_checked') + 1);
         }
 
         self::cleanup_last_domains();
