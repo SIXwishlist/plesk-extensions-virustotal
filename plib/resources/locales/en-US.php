@@ -23,4 +23,5 @@ $messages = array(
     'faq' => 'FAQ',
     'question1' => '<p><b>Q: Why aren\'t there notifications by e-mail?</b><br />A: We have no way of knowing that e-mails will reach your inbox.</p>',
     'question2' => '<p><b>Q: Why do the daily scheduled task take so long?</b><br />A: Because of the limitations of the public VirusTotal API the extension sends the API requests at the speed of 3 domains per minute.</p>',
+    'question3' => '<p><b>Q: Can I execute daily scheduled task several times in a one day?</b><br />A: Yes, you can.</p>',
 );
