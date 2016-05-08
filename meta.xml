@@ -7,6 +7,6 @@
   <version>1.0</version>
   <release>1</release>
   <vendor>Oleg Neumyvakin</vendor>
-  <url>http://twitter.com/oneumyvakin</url>
+  <url>https://github.com/oneumyvakin/plesk-extensions-virustotal</url>
   <plesk_min_version>12.5.30</plesk_min_version>
 </module>

@@ -30,11 +30,11 @@ class Modules_VirustotalSiteChecker_Helper
             if (!$report) {
                 $report = [];
             }
-            /*
+
             if (!$domain->isValid()) {
                 continue;
             }
-            */
+            
             if (self::is_enough()) {
                 exit(0);
             }
