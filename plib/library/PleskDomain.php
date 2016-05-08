@@ -39,7 +39,7 @@ class Modules_VirustotalSiteChecker_PleskDomain
         $records = dns_get_record($this->ascii_name, DNS_A|DNS_AAAA);
         pm_Log::debug('dns_get_record for ' . $this->ascii_name . ' : ' . print_r($records, 1));
         
-        if ($records === false) {
+        if (!$records) {
             return false;
         }
         foreach ($records as $r) {
