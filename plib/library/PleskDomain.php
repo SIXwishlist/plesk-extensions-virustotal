@@ -36,7 +36,16 @@ class Modules_VirustotalSiteChecker_PleskDomain
               }
             }
          */
-        $records = dns_get_record($this->ascii_name, DNS_A|DNS_AAAA);
+        if (!$this->ascii_name) {
+            return false;
+        }
+        
+        try {
+            $records = @dns_get_record($this->ascii_name, DNS_A|DNS_AAAA);
+        } catch (Exception $e) {
+            pm_Log::debug(print_r($this, 1) . ' : ' . $e->getMessage());
+            return false;
+        }
         pm_Log::debug('dns_get_record for ' . $this->ascii_name . ' : ' . print_r($records, 1));
         
         if (!$records) {

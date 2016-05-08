@@ -34,7 +34,7 @@ class Modules_VirustotalSiteChecker_Helper
             if (!$domain->isValid()) {
                 continue;
             }
-            
+
             if (self::is_enough()) {
                 exit(0);
             }
@@ -259,7 +259,11 @@ class Modules_VirustotalSiteChecker_Helper
         $websp_array =  is_array($websp->result) ? $websp->result : array($websp->result);
 
         $tmp_list = array_merge($sites_array, $websp_array);
+
         foreach ($tmp_list as $domain) {
+            if (!$domain->id) {
+                continue;
+            }
 
             $domains[$domain->id] = new Modules_VirustotalSiteChecker_PleskDomain(
                 $domain->id,
@@ -273,6 +277,7 @@ class Modules_VirustotalSiteChecker_Helper
         }
 
         ksort($domains);
+        pm_Log::debug('Domains : ' . print_r($domains, 1));
         return $domains;
     }
 }
