@@ -22,5 +22,5 @@ $messages = array(
     'feedback' => 'Submit any questions to <a rel="noopener noreferrer" target="_blank" href="http://serverfault.com/questions/ask?tags=plesk+virustotal">serverfault.com</a> using the tags "plesk" and "virustotal"',
     'faq' => 'FAQ',
     'question1' => '<p><b>Q: Why aren\'t there notifications by e-mail?</b><br />A: We have no way of knowing that e-mails will reach your inbox.</p>',
-    'question2' => '<p><b>Q: Why do the daily scheduled tasks take so long?</b><br />A: Because of the limitations of the public VirusTotal API the extension sends the API requests at the speed of 3 domains per minute.</p>',
+    'question2' => '<p><b>Q: Why do the daily scheduled task take so long?</b><br />A: Because of the limitations of the public VirusTotal API the extension sends the API requests at the speed of 3 domains per minute.</p>',
 );
