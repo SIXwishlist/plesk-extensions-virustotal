@@ -1,6 +1,9 @@
 <?php
 
 $messages = array(
+    'tabReports' => 'Reports',
+    'tabSettings' => 'Settings',
+    'tabAbout' => 'About',
     'pageTitle' => 'VirusTotal Site Checker',
     'virustotalEnabled' => 'VirusTotal is enabled',
     'virustotalPublicApiKey' => 'VirusTotal Public API key',

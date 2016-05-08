@@ -1,6 +1,9 @@
 <?php
 
 $messages = array(
+    'tabReports' => 'Отчеты',
+    'tabSettings' => 'Настройки',
+    'tabAbout' => 'О программе',
     'pageTitle' => 'VirusTotal Site Checker',
     'virustotalEnabled' => 'VirusTotal включен',
     'virustotalPublicApiKey' => 'Публичный API ключ VirusTotal',

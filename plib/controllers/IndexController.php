@@ -12,15 +12,15 @@ class IndexController extends pm_Controller_Action
         
         $this->view->tabs = [
             [
-                'title' => 'Report',
+                'title' => $this->lmsg('tabReports'),
                 'action' => 'report',
             ],
             [
-                'title' => 'Settings',
+                'title' => $this->lmsg('tabSettings'),
                 'action' => 'settings',
             ],
             [
-                'title' => 'About',
+                'title' => $this->lmsg('tabAbout'),
                 'action' => 'about',
             ],
         ];
