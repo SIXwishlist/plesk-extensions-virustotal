@@ -46,6 +46,13 @@ class IndexController extends pm_Controller_Action
         $this->view->list = $this->_getDomainsReportList();
 
     }
+
+    public function reportDataAction()
+    {
+        $list = $this->_getDomainsReportList();
+        // Json data from pm_View_List_Simple
+        $this->_helper->json($list->fetchData());
+    }
     
     public function settingsAction() 
     {
@@ -126,7 +133,7 @@ class IndexController extends pm_Controller_Action
         $i = 0;
         $data = [];
         $report = Modules_VirustotalSiteChecker_Helper::getDomainsReport();
-        foreach ($report['bad'] as $domain) {
+        foreach ($report['all'] as $domain) {
             $i++;
 
             $data[$i] = [
@@ -152,26 +159,29 @@ class IndexController extends pm_Controller_Action
             'column-1' => [
                 'title' => '#',
                 'noEscape' => true,
-                'searchable' => true,
+                'searchable' => false,
             ],
             'column-2' => [
                 'title' => $this->lmsg('domain'),
                 'noEscape' => true,
-                'sortable' => false,
+                'searchable' => true,
+                'sortable' => true,
             ],
             'column-3' => [
                 'title' => $this->lmsg('checkResult'),
                 'noEscape' => true,
-                'sortable' => false,
+                'sortable' => true,
             ],
             'column-4' => [
                 'title' => $this->lmsg('reportLink'),
                 'noEscape' => true,
+                'searchable' => false,
                 'sortable' => false,
+                
             ],
         ]);
 
-        $list->setDataUrl(['action' => 'report']);
+        $list->setDataUrl(['action' => 'report-data']);
         return $list;
     }
 

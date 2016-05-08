@@ -105,17 +105,13 @@ class Modules_VirustotalSiteChecker_Helper
                 exit(0);
             }
             $report = self::virustotal_scan_url_report($domain->ascii_name);
-            //error_log(print_r($report, 1));
+            
+            //pm_Log::debug(print_r($report, 1));
+            
             if (isset($report['positives'])) {
                 $request['virustotal_request_done'] = true;
                 $request['virustotal_report_positives'] = $report['positives'];
-                pm_Settings::set('domain_id_' . $domain->id, json_encode($request));
-
-                if ($report['positives'] > 0) {
-                    self::report_domain($domain, $report);
-                } else {
-                    self::unreport_domain($domain);
-                }
+                self::report_domain($domain, $report);
             }
         }
     }
@@ -207,6 +203,7 @@ class Modules_VirustotalSiteChecker_Helper
     public static function getDomainsReport()
     {
         static $domains = [
+            'all' => [],
             'bad' => [],
             'total' => 0,
         ];
@@ -218,19 +215,21 @@ class Modules_VirustotalSiteChecker_Helper
             if (!$report) {
                 continue;
             }
-
-            $domains['total']++;
-
-            if (!isset($report['virustotal_positives']) || $report['virustotal_positives'] <= 0) {
+            if (!isset($report['virustotal_positives'])) {
                 continue;
             }
-
+            $domains['total']++;
             $domain->virustotal_positives = $report['virustotal_positives'];
             $domain->virustotal_total = $report['virustotal_total'];
             $domain->virustotal_domain_info_url = $report['virustotal_domain_info_url'];
 
+            $domains['all'][$domain->id] = $domain;
+            
+            if (!isset($report['virustotal_positives']) || $report['virustotal_positives'] <= 0) {
+                continue;
+            }
+            
             $domains['bad'][$domain->id] = $domain;
-
         }
         
         return $domains;
