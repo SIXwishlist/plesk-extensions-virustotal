@@ -126,8 +126,6 @@ class IndexController extends pm_Controller_Action
             $text = $this->lmsg('totalReports') . count($report['bad']) . $this->lmsg('ofTotalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
         }
 
-        pm_Settings::set('report_summary', $text);
-
         return $text;
     }
     

@@ -25,7 +25,6 @@ class Modules_VirustotalSiteChecker_Promo_Home extends pm_Promo_AdminHome
         if (count($report['bad']) > 0) {
             $text = $this->lmsg('totalReports') . count($report['bad']) . $this->lmsg('ofTotalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
         }
-        pm_Settings::set('report_summary', $text);
 
         return $text;
     }
