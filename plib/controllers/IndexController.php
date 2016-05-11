@@ -6,8 +6,11 @@ class IndexController extends pm_Controller_Action
 {
     public function init()
     {
+        $this->_accessLevel = 'admin';
+        
         parent::init();
-
+        
+        
         $this->view->pageTitle = $this->lmsg('pageTitle');
         
         $this->view->tabs = [
