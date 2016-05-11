@@ -161,7 +161,6 @@ class IndexController extends pm_Controller_Action
             pm_View_List_Simple::COLUMN_SELECTION,
             'column-1' => [
                 'title' => '#',
-                'noEscape' => true,
                 'searchable' => false,
             ],
             'column-2' => [
@@ -172,7 +171,6 @@ class IndexController extends pm_Controller_Action
             ],
             'column-3' => [
                 'title' => $this->lmsg('checkResult'),
-                'noEscape' => true,
                 'sortable' => true,
             ],
             'column-4' => [

@@ -156,9 +156,9 @@ class Modules_VirustotalSiteChecker_Helper
 
         $report['domain'] = $domain;
         $report['virustotal_domain_info_url'] = sprintf(self::virustotal_domain_info_url, $domain->ascii_name);
-        $report['virustotal_positives'] = $new_report['positives'];
-        $report['virustotal_total'] = isset($new_report['total']) ? $new_report['total'] : '';
-        $report['virustotal_scan_date'] = isset($new_report['scan_date']) ? $new_report['total'] : '';
+        $report['virustotal_positives'] = (int)$new_report['positives'];
+        $report['virustotal_total'] = isset($new_report['total']) ? (int)$new_report['total'] : '';
+        $report['virustotal_scan_date'] = isset($new_report['scan_date']) ? $new_report['scan_date'] : '';
 
         pm_Settings::set('domain_id_' . $domain->id, json_encode($report));
     }
