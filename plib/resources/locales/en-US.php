@@ -10,7 +10,7 @@ $messages = array(
     'adminHomeWidgetEnabled' => 'Administrator\'s home page widget enabled',
     'settingsWasSuccessfullySaved' => 'Settings successfully saved.',
     'domain' => 'Domain',
-    'checkResult' => 'Results of check',
+    'checkResult' => 'Count of total scanners detected the site as malicious',
     'reportLink' => 'Link to report',
     'virustotalReport' => 'VirusTotal report',
     'apikey_help' => 'You can get an API key after you register at <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>https://virustotal.com/</a>',

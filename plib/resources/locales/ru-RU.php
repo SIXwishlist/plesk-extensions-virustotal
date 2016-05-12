@@ -10,7 +10,7 @@ $messages = array(
     'adminHomeWidgetEnabled' => 'Виджет на домашней странице администратора включен',
     'settingsWasSuccessfullySaved' => 'Настройки были сохранены.',
     'domain' => 'Домен',
-    'checkResult' => 'Результат проверки',
+    'checkResult' => 'Количество сканеров определило сайт как злонамеренный',
     'reportLink' => 'Сслыка на отчет',
     'virustotalReport' => 'Отчет VirusTotal',
     'apikey_help' => 'Вы можете получить API-ключ после регистрации на <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>https://virustotal.com/</a>',
