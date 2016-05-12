@@ -24,7 +24,7 @@ class Modules_VirustotalSiteChecker_Helper
             }
             
             $report = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
-            if ($report && !$report['virustotal_request_done']) {
+            if ($report && isset($report['virustotal_request_done']) && !$report['virustotal_request_done']) {
                 continue;
             }
             if (!$report) {
@@ -107,11 +107,9 @@ class Modules_VirustotalSiteChecker_Helper
             }
             $report = self::virustotal_scan_url_report($domain->ascii_name);
             
-            //pm_Log::debug(print_r($report, 1));
+            pm_Log::debug(print_r($report, 1));
             
             if (isset($report['positives'])) {
-                $request['virustotal_request_done'] = true;
-                $request['virustotal_report_positives'] = $report['positives'];
                 self::report_domain($domain, $report);
             }
         }
@@ -136,7 +134,7 @@ class Modules_VirustotalSiteChecker_Helper
         if (!$report) {
             $report = [];
         }
-        
+        $report['virustotal_request_done'] = true;
         $report['virustotal_positives'] = (int)$new_report['positives'];
         $report['virustotal_total'] = isset($new_report['total']) ? (int)$new_report['total'] : '';
         $report['virustotal_scan_date'] = isset($new_report['scan_date']) ? $new_report['scan_date'] : '';
@@ -161,6 +159,8 @@ class Modules_VirustotalSiteChecker_Helper
     }
 
     /**
+     * https://virustotal.com/ru/documentation/public-api/#getting-domain-reports
+     *
      * @param $url string
      * @return array
      */
@@ -203,16 +203,17 @@ class Modules_VirustotalSiteChecker_Helper
                     $domain->no_scanning_results = pm_Locale::lmsg('domainInactiveOrCantbeResolvedInHostingIp');
                 }
             }
-            $domains['total']++;
-            
+                        
             if (isset($report['virustotal_positives'])) {
                 unset($domain->no_scanning_results);
+                $domain->virustotal_scan_date = $report['virustotal_scan_date'];
                 $domain->virustotal_positives = $report['virustotal_positives'];
                 $domain->virustotal_total = $report['virustotal_total'];
                 $domain->virustotal_domain_info_url = sprintf(self::virustotal_domain_info_url, $domain->ascii_name);
             }
 
             $domains['all'][$domain->id] = $domain;
+            $domains['total']++;
             
             if (!isset($report['virustotal_positives']) || $report['virustotal_positives'] <= 0) {
                 continue;

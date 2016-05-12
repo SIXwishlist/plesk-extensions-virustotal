@@ -149,8 +149,9 @@ class IndexController extends pm_Controller_Action
             $data[$i] = [
                 'column-1' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain->webspace_id . '?pageUrl=/web/overview/id/d:' . $domain->id . '">' . $domain->name . '</a>',
                 'column-2' => $domain->invalid ? $this->lmsg('no') : $this->lmsg('yes'),
-                'column-3' => $result_column,
-                'column-4' => $report_link_column,
+                'column-3' => $domain->virustotal_scan_date,
+                'column-4' => $result_column,
+                'column-5' => $report_link_column,
             ];
         }
         
@@ -177,10 +178,14 @@ class IndexController extends pm_Controller_Action
                 'sortable' => true,
             ],
             'column-3' => [
-                'title' => $this->lmsg('checkResult'),
+                'title' => $this->lmsg('scanDate'),
                 'sortable' => true,
             ],
             'column-4' => [
+                'title' => $this->lmsg('checkResult'),
+                'sortable' => true,
+            ],
+            'column-5' => [
                 'title' => $this->lmsg('reportLink'),
                 'noEscape' => true,
                 'searchable' => false,
