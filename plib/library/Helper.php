@@ -136,8 +136,7 @@ class Modules_VirustotalSiteChecker_Helper
         if (!$report) {
             $report = [];
         }
-
-        $report['virustotal_domain_info_url'] = sprintf(self::virustotal_domain_info_url, $domain->ascii_name);
+        
         $report['virustotal_positives'] = (int)$new_report['positives'];
         $report['virustotal_total'] = isset($new_report['total']) ? (int)$new_report['total'] : '';
         $report['virustotal_scan_date'] = isset($new_report['scan_date']) ? $new_report['scan_date'] : '';
@@ -210,7 +209,7 @@ class Modules_VirustotalSiteChecker_Helper
                 unset($domain->no_scanning_results);
                 $domain->virustotal_positives = $report['virustotal_positives'];
                 $domain->virustotal_total = $report['virustotal_total'];
-                $domain->virustotal_domain_info_url = $report['virustotal_domain_info_url'];
+                $domain->virustotal_domain_info_url = sprintf(self::virustotal_domain_info_url, $domain->ascii_name);
             }
 
             $domains['all'][$domain->id] = $domain;
