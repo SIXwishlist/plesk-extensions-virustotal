@@ -7,6 +7,7 @@ class Modules_VirustotalSiteChecker_PleskDomain
         $this->name = $name;
         $this->ascii_name = $ascii_name;
         $this->status = $status;
+        $this->invalid = false;
         $this->dns_ip_address = $dns_ip_address;
         $this->htype = $htype;
         $this->webspace_id  = $webspace_id ? $webspace_id : $id;
@@ -78,5 +79,12 @@ class Modules_VirustotalSiteChecker_PleskDomain
         }
         
         return true;
+    }
+
+    /**
+     * @return void
+     */
+    public function setInvalid() {
+        $this->invalid = true;
     }
 }

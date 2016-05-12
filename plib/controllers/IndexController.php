@@ -45,6 +45,7 @@ class IndexController extends pm_Controller_Action
             $this->_forward('settings');
             return;
         }
+        
         $this->view->summary = $this->_getReportSummary();
         $this->view->list = $this->_getDomainsReportList();
 
@@ -137,11 +138,19 @@ class IndexController extends pm_Controller_Action
         foreach ($report['all'] as $domain) {
             $i++;
 
+            $result_column = $domain->virustotal_positives . ' / ' . $domain->virustotal_total;
+            $report_link_column = '<a rel="noopener noreferrer" target="_blank" href="' . $domain->virustotal_domain_info_url . '">' .  $this->lmsg('virustotalReport') . '</a>';
+            
+            if (isset($domain->no_scanning_results)) {
+                $result_column = $domain->no_scanning_results;
+                $report_link_column = '';
+            }
+            
             $data[$i] = [
-                'column-1' => $i,
-                'column-2' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain->webspace_id . '?pageUrl=/web/overview/id/d:' . $domain->id . '">' . $domain->name . '</a>',
-                'column-3' => $domain->virustotal_positives . ' / ' . $domain->virustotal_total,
-                'column-4' => '<a rel="noopener noreferrer" target="_blank" href="' . $domain->virustotal_domain_info_url . '">' .  $this->lmsg('virustotalReport') . '</a>',
+                'column-1' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain->webspace_id . '?pageUrl=/web/overview/id/d:' . $domain->id . '">' . $domain->name . '</a>',
+                'column-2' => $domain->invalid ? $this->lmsg('no') : $this->lmsg('yes'),
+                'column-3' => $result_column,
+                'column-4' => $report_link_column,
             ];
         }
         
@@ -156,15 +165,15 @@ class IndexController extends pm_Controller_Action
         $list = new pm_View_List_Simple($this->view, $this->_request, $options);
         $list->setData($data);
         $list->setColumns([
-            pm_View_List_Simple::COLUMN_SELECTION,
             'column-1' => [
-                'title' => '#',
-                'searchable' => false,
-            ],
-            'column-2' => [
                 'title' => $this->lmsg('domain'),
                 'noEscape' => true,
                 'searchable' => true,
+                'sortable' => true,
+            ],
+            'column-2' => [
+                'title' => $this->lmsg('availableForScanning'),
+                'searchable' => false,
                 'sortable' => true,
             ],
             'column-3' => [
