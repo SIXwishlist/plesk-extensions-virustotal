@@ -10,6 +10,7 @@ $messages = array(
     'adminHomeWidgetEnabled' => 'Administrator\'s home page widget enabled',
     'settingsWasSuccessfullySaved' => 'Settings successfully saved.',
     'settingsFormApiInvalid' => 'API key is invalid. HTTP status code: %%code%%',
+    'apiKeyBecameInvalid' => 'Last API request has finished with HTTP error 403',
     'domain' => 'Domain',
     'availableForScanning' => 'Available for scanning',
     'yes' => 'Yes',

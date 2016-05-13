@@ -10,6 +10,7 @@ $messages = array(
     'adminHomeWidgetEnabled' => 'Виджет на домашней странице администратора включен',
     'settingsWasSuccessfullySaved' => 'Настройки были сохранены.',
     'settingsFormApiInvalid' => 'Неправильный API ключ',
+    'apiKeyBecameInvalid' => 'Последний запрос к API завершился с HTTP ошибкой 403',
     'domain' => 'Домен',
     'availableForScanning' => 'Доступен для сканирования',
     'yes' => 'Да',

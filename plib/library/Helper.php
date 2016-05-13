@@ -9,10 +9,13 @@ class Modules_VirustotalSiteChecker_Helper
     const virustotal_api_day_limit = 4320;
 
     public static  function check()
-    {
-        
-        
+    {               
         if (!pm_Settings::get('virustotal_enabled') || !pm_Settings::get('virustotal_api_key')) {
+            return;
+        }
+
+        if (pm_Settings::get('apiKeyBecameInvalid')) {
+            pm_Log::err(pm_Locale::lmsg('apiKeyBecameInvalid'));
             return;
         }
 
@@ -43,7 +46,12 @@ class Modules_VirustotalSiteChecker_Helper
             }
             $report['domain'] = $domain;
             $report['virustotal_request_done'] = false;
+            
             $request = self::virustotal_scan_url_request($domain->ascii_name);
+            if (!$request) {
+                return;
+            }
+            
             $report['virustotal_request'] = array(
                 'response_code' => $request['response_code'],
                 'scan_date' => $request['scan_date'],
@@ -106,6 +114,9 @@ class Modules_VirustotalSiteChecker_Helper
                 exit(0);
             }
             $report = self::virustotal_scan_url_report($domain->ascii_name);
+            if (!$report) {
+                return;
+            }
             
             pm_Log::debug(print_r($report, 1));
             
@@ -154,7 +165,11 @@ class Modules_VirustotalSiteChecker_Helper
         $client->setParameterPost('apikey', pm_Settings::get('virustotal_api_key'));
         sleep(self::virustotal_api_timeout);
         $response = $client->request(Zend_Http_Client::POST);
-
+        
+        if ($response->getStatus() == 403) {
+            pm_Settings::set('apiKeyBecameInvalid', '1');    
+        }
+                
         return json_decode($response->getBody(), true);
     }
 
@@ -172,6 +187,10 @@ class Modules_VirustotalSiteChecker_Helper
         $client->setParameterPost('apikey', pm_Settings::get('virustotal_api_key'));
         sleep(self::virustotal_api_timeout);
         $response = $client->request(Zend_Http_Client::POST);
+
+        if ($response->getStatus() == 403) {
+            pm_Settings::set('apiKeyBecameInvalid', '1');
+        }
 
         return json_decode($response->getBody(), true);
     }
@@ -284,8 +303,9 @@ class Modules_VirustotalSiteChecker_Helper
         $client->setParameterPost('apikey', $key);
 
         $response = $client->request(Zend_Http_Client::POST);
-        pm_Log::debug('API key check result: ' . print_r($response, 1));
         $body = json_decode($response->getBody(), true);
+        pm_Log::debug('API key check result: ' . print_r($response, 1) . "\n" . print_r($body, 1));
+        
         if (isset($body['response_code'])) {
             return [
                 'valid' => true,

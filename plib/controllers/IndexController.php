@@ -31,7 +31,7 @@ class IndexController extends pm_Controller_Action
 
     public function indexAction()
     {
-        if (!pm_Settings::get('virustotal_enabled')) {
+        if (!pm_Settings::get('virustotal_enabled') || pm_Settings::get('apiKeyBecameInvalid')) {
             $this->_forward('settings');
             return;
         }
@@ -60,6 +60,10 @@ class IndexController extends pm_Controller_Action
     
     public function settingsAction() 
     {
+        if (pm_Settings::get('apiKeyBecameInvalid')) {
+            $this->view->api_key_invalid = $this->lmsg('apiKeyBecameInvalid');
+        }
+        
         $this->view->help_tip = $this->lmsg('apikey_help');
 
         $form = new Modules_VirustotalSiteChecker_SettingsForm();
@@ -89,6 +93,7 @@ class IndexController extends pm_Controller_Action
 
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
 
+            pm_Settings::set('apiKeyBecameInvalid', '');
             pm_Settings::set('virustotal_enabled', $form->getValue('virustotal_enabled'));
             pm_Settings::set('virustotal_api_key', $form->getValue('virustotal_api_key'));
             pm_Settings::set('_promo_admin_home', $form->getValue('_promo_admin_home'));
