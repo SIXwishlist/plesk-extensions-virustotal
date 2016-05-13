@@ -41,6 +41,6 @@ class Modules_VirustotalSiteChecker_Promo_Home extends pm_Promo_AdminHome
     public function getIconUrl()
     {
         pm_Context::init('virustotal-site-checker');
-        return pm_Context::getBaseUrl() . '/images/virus-total.png';
+        return pm_Context::getBaseUrl() . '/images/bug.png';
     }
 }

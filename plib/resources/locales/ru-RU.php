@@ -23,7 +23,7 @@ $messages = array(
     'apikey_help' => 'Вы можете бесплатно получить API-ключ после регистрации на <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>сайте поставщика услуг</a>',
     'virustotalPromoTitle' => 'Отчеты о вирусах',
     'virustotalPromoButtonTitle' => 'Подробнее',
-    'scanningWasNotPerformedYet' => 'Сканирование еще не выполнялось.',
+    'scanningWasNotPerformedYet' => 'Сканирование еще не выполнялось. Чтобы выполнить сканирование сейчас, Вы можете запустить запланированную задачу в <a href="/admin/scheduler/tasks-list">Scheduled Tasks</a>',
     'scanningRequestIsSent' => 'Запрос на сканирование отправлен',
     'totalDomains' => 'Всего доменов проверено: ',
     'ofTotalDomains' => ' из всего проверенных доменов ',

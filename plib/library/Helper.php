@@ -48,7 +48,8 @@ class Modules_VirustotalSiteChecker_Helper
             $report['virustotal_request_done'] = false;
             
             $request = self::virustotal_scan_url_request($domain->ascii_name);
-            if (!$request) {
+            if (empty($request)) {
+                pm_Log::debug('Empty request ' . print_r($request, 1));
                 return;
             }
             
@@ -234,7 +235,7 @@ class Modules_VirustotalSiteChecker_Helper
         foreach (self::getDomains() as $domain) {
             $report = json_decode(pm_Settings::get('domain_id_' . $domain->id), true);
             if (!$report) {
-                $domain->no_scanning_results = pm_Locale::lmsg('scanningWasNotPerformedYet');
+                $domain->no_scanning_results = pm_Locale::lmsg('scanningWasNotPerformedYetForList');
             } else {
                 $domain->no_scanning_results = pm_Locale::lmsg('scanningRequestIsSent');
                 
