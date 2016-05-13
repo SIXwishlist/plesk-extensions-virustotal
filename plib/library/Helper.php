@@ -9,7 +9,7 @@ class Modules_VirustotalSiteChecker_Helper
     const virustotal_api_day_limit = 4320;
 
     public static  function check()
-    {               
+    {           
         if (!pm_Settings::get('virustotal_enabled') || !pm_Settings::get('virustotal_api_key')) {
             return;
         }
@@ -62,6 +62,7 @@ class Modules_VirustotalSiteChecker_Helper
         }
 
         self::cleanup_last_domains();
+        self::cleanup_deleted_domains();
     }
 
     /**
@@ -131,6 +132,26 @@ class Modules_VirustotalSiteChecker_Helper
         $ops = ['report', 'check'];
         foreach ($ops as $operation) {
             pm_Settings::set('last_domain_' . $operation, false);
+        }
+    }
+
+    public static function cleanup_deleted_domains()
+    {
+        pm_Bootstrap::init();
+        $module_id = pm_Bootstrap::getDbAdapter()->fetchOne("select module_id from ModuleSettings where name ='virustotal_enabled'");
+        if (!$module_id) {
+            return;
+        }
+        $reports = pm_Bootstrap::getDbAdapter()->fetchAssoc("select name, value from ModuleSettings where module_id = ${module_id} and name like 'domain_id_%'");
+        //pm_Log::debug(print_r($reports, 1));
+
+        foreach ($reports as $row) {
+            $report = json_decode($row['value'], true);
+            try {
+                $domain = new pm_Domain($report['domain']['id']);
+            } catch (pm_Exception $e) {
+                pm_Bootstrap::getDbAdapter()->delete('ModuleSettings', "module_id = ${module_id} AND name = '{$row['name']}'");
+            }
         }
     }
     
