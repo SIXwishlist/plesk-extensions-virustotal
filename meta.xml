@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
   <id>virustotal-site-checker</id>
-  <name>VirusTotal Site Checker</name>
-  <description>Automate your sites checking on VirusTotal. You must have a VirusTotal account to use this extension.</description>
-  <description xml:lang="ru-RU">Автоматизируйте проверку своих сайтов на VirusTotal. Чтобы использовать это расширение у Вас должен быть аккаунт VirusTotal.</description>
+  <name>Virus Site Checker</name>
+  <description>Automate your sites virus checking for free.</description>
+  <description xml:lang="ru-RU">Автоматизируйте бесплатную проверку своих сайтов на вирусы.</description>
   <version>1.0</version>
   <release>1</release>
   <vendor>Oleg Neumyvakin</vendor>
