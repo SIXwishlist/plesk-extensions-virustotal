@@ -269,4 +269,33 @@ class Modules_VirustotalSiteChecker_Helper
         pm_Log::debug('Domains : ' . print_r($domains, 1));
         return $domains;
     }
+
+    /**
+     * https://virustotal.com/ru/documentation/public-api/#getting-domain-reports
+     *
+     * @param $key string
+     * @return array
+     */
+    public static function checkApiKey($key)
+    {
+        $client = new Zend_Http_Client(self::virustotal_report_url);
+
+        $client->setParameterPost('resource', 'www.virustotal.com');
+        $client->setParameterPost('apikey', $key);
+
+        $response = $client->request(Zend_Http_Client::POST);
+        pm_Log::debug('API key check result: ' . print_r($response, 1));
+        $body = json_decode($response->getBody(), true);
+        if (isset($body['response_code'])) {
+            return [
+                'valid' => true,
+                'http_code' => $response->getStatus(),
+            ];
+        }
+        
+        return [
+            'valid' => false,
+            'http_code' => $response->getStatus(),
+        ];
+    }
 }

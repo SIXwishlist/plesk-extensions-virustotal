@@ -9,6 +9,7 @@ $messages = array(
     'virustotalPublicApiKey' => 'VirusTotal Public API key',
     'adminHomeWidgetEnabled' => 'Administrator\'s home page widget enabled',
     'settingsWasSuccessfullySaved' => 'Settings successfully saved.',
+    'settingsFormApiInvalid' => 'API key is invalid. HTTP status code: %%code%%',
     'domain' => 'Domain',
     'availableForScanning' => 'Available for scanning',
     'yes' => 'Yes',

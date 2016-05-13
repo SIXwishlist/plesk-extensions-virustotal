@@ -62,7 +62,7 @@ class IndexController extends pm_Controller_Action
     {
         $this->view->help_tip = $this->lmsg('apikey_help');
 
-        $form = new pm_Form_Simple();
+        $form = new Modules_VirustotalSiteChecker_SettingsForm();
 
         $form->addElement('checkbox', 'virustotal_enabled', [
             'label' => $this->lmsg('virustotalEnabled'),

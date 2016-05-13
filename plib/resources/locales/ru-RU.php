@@ -9,6 +9,7 @@ $messages = array(
     'virustotalPublicApiKey' => 'Публичный API ключ VirusTotal',
     'adminHomeWidgetEnabled' => 'Виджет на домашней странице администратора включен',
     'settingsWasSuccessfullySaved' => 'Настройки были сохранены.',
+    'settingsFormApiInvalid' => 'Неправильный API ключ',
     'domain' => 'Домен',
     'availableForScanning' => 'Доступен для сканирования',
     'yes' => 'Да',
