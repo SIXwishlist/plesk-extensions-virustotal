@@ -15,6 +15,7 @@ $messages = array(
     'availableForScanning' => 'Доступен для сканирования',
     'yes' => 'Да',
     'no' => 'Нет',
+    'unknown' => 'Неизвестно',
     'domainInactiveOrCantbeResolvedInHostingIp' => 'Домен "Приостановлен", "Отключен" или не резолвится в присвоенный IP адрес',
     'scanDate' => 'Дата сканирования',
     'checkResult' => 'Срабатывания / Всего',

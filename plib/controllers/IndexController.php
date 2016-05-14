@@ -153,7 +153,7 @@ class IndexController extends pm_Controller_Action
             
             $data[$i] = [
                 'column-1' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain->webspace_id . '?pageUrl=/web/overview/id/d:' . $domain->id . '">' . $domain->name . '</a>',
-                'column-2' => $domain->invalid ? $this->lmsg('no') : $this->lmsg('yes'),
+                'column-2' => $domain->getAvailable(),
                 'column-3' => $domain->virustotal_scan_date,
                 'column-4' => $result_column,
                 'column-5' => $report_link_column,

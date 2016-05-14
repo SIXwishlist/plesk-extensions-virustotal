@@ -15,6 +15,7 @@ $messages = array(
     'availableForScanning' => 'Available for scanning',
     'yes' => 'Yes',
     'no' => 'No',
+    'unknown' => 'Unknown',
     'domainInactiveOrCantbeResolvedInHostingIp' => 'Domain is "Suspended", "Disabled" or can\'t be resolved in hosting IP address',
     'scanDate' => 'Scan Date',
     'checkResult' => 'Positives / Total',

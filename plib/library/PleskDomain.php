@@ -7,7 +7,7 @@ class Modules_VirustotalSiteChecker_PleskDomain
         $this->name = $name;
         $this->ascii_name = $ascii_name;
         $this->status = $status;
-        $this->invalid = false;
+        $this->available = 'unknown';
         $this->dns_ip_address = $dns_ip_address;
         $this->htype = $htype;
         $this->webspace_id  = $webspace_id ? $webspace_id : $id;
@@ -71,20 +71,22 @@ class Modules_VirustotalSiteChecker_PleskDomain
     /**
      * @return bool
      */
-    public function isValid() {
+    public function isAvailable() {
+        $this->available = 'no';
         if ($this->status > 0) {
             return false;
         } elseif (!$this->isResolvingToPlesk()) {
             return false;
         }
-        
+
+        $this->available = 'yes';
         return true;
     }
 
     /**
-     * @return void
+     * @return string
      */
-    public function setInvalid() {
-        $this->invalid = true;
+    public function getAvailable() {
+        return pm_Locale::lmsg($this->available);
     }
 }
