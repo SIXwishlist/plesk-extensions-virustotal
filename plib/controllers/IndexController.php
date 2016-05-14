@@ -125,7 +125,7 @@ class IndexController extends pm_Controller_Action
         if ($last_scan) {
             $text = $this->lmsg('totalDomains') . $total_domains . ', ' . $this->lmsg('lastScan') . $last_scan;
         } else {
-            $text = $this->lmsg('scanningWasNotPerformedYet');
+            $text = $this->lmsg('scanningWasNotPerformedYet') . ' ' . $this->lmsg('youCanStartTaskAt');
         }
         
         if (count($report['bad']) > 0) {
