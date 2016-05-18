@@ -45,10 +45,22 @@ class IndexController extends pm_Controller_Action
             $this->_forward('settings');
             return;
         }
+
+        if (pm_Settings::get('apiKeyBecameInvalid') && !$this->_status->hasMessage($this->lmsg('apiKeyBecameInvalid'))) {
+            $this->_status->addError($this->lmsg('apiKeyBecameInvalid'));
+        }
         
         $this->view->summary = $this->_getReportSummary();
         $this->view->list = $this->_getDomainsReportList();
+        $this->view->scan = '';
+        
+        if (class_exists('pm_LongTask_Manager')) {
+            $taskManager = new pm_LongTask_Manager();
 
+            $task1 = new Modules_VirustotalSiteChecker_Task_Scan();
+
+            $this->view->scan = "I'm a scan button";
+        }
     }
 
     public function reportDataAction()
@@ -58,10 +70,10 @@ class IndexController extends pm_Controller_Action
         $this->_helper->json($list->fetchData());
     }
     
-    public function settingsAction() 
+    public function settingsAction()
     {
-        if (pm_Settings::get('apiKeyBecameInvalid')) {
-            $this->view->api_key_invalid = $this->lmsg('apiKeyBecameInvalid');
+        if (pm_Settings::get('apiKeyBecameInvalid') && !$this->_status->hasMessage($this->lmsg('apiKeyBecameInvalid'))) {
+            $this->_status->addError($this->lmsg('apiKeyBecameInvalid'));
         }
         
         $this->view->help_tip = $this->lmsg('apikey_help');
@@ -107,6 +119,10 @@ class IndexController extends pm_Controller_Action
 
     public function aboutAction()
     {
+        if (pm_Settings::get('apiKeyBecameInvalid') && !$this->_status->hasMessage($this->lmsg('apiKeyBecameInvalid'))) {
+            $this->_status->addError($this->lmsg('apiKeyBecameInvalid'));
+        }
+        
         $this->view->about = $this->lmsg('about');
         $this->view->feedback = $this->lmsg('feedback');
         $this->view->faq = $this->lmsg('faq');

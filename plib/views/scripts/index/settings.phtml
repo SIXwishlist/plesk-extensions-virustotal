@@ -1,11 +1,4 @@
 <?php echo $this->renderTabs($this->tabs); ?>
-<?php
-    if ($this->api_key_invalid) {
-        echo('<div class="msg-box msg-error"><div class="msg-content">');
-        echo $this->api_key_invalid;
-        echo('</div></div>');
-    }
-?>
 <?php echo $this->help_tip; ?>
 <?php echo $this->form; ?>
 
