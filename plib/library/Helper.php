@@ -7,6 +7,7 @@ class Modules_VirustotalSiteChecker_Helper
     const virustotal_domain_info_url = 'https://www.virustotal.com/domain/%s/information/';
     const virustotal_api_timeout = 20;
     const virustotal_api_day_limit = 4320;
+    const virustotal_api_hour_limit = 180;
 
     public static  function check()
     {           
@@ -73,7 +74,7 @@ class Modules_VirustotalSiteChecker_Helper
     public static function is_enough()
     {
         static $counter = 0;
-        if ($counter >= self::virustotal_api_day_limit) {
+        if ($counter >= self::virustotal_api_hour_limit) {
             return true;
         }
         $counter++;

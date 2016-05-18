@@ -12,7 +12,7 @@ foreach ($tasks as $task) {
     }
 }
 $task = new pm_Scheduler_Task();
-$task->setSchedule(pm_Scheduler::$EVERY_DAY);
+$task->setSchedule(pm_Scheduler::$EVERY_HOUR);
 $task->setCmd('virustotal-periodic-task.php');
 pm_Scheduler::getInstance()->putTask($task);
 pm_Settings::set('virustotal_periodic_task_id', $task->getId());
