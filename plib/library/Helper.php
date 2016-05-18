@@ -292,7 +292,7 @@ class Modules_VirustotalSiteChecker_Helper
         $tmp_list = array_merge($sites_array, $websp_array);
 
         foreach ($tmp_list as $domain) {
-            if (!$domain->id) {
+            if (!isset($domain->id)) {
                 continue;
             }
 

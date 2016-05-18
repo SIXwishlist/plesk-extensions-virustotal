@@ -143,18 +143,19 @@ class IndexController extends pm_Controller_Action
         foreach ($report['all'] as $domain) {
             $i++;
 
-            $result_column = $domain->virustotal_positives . ' / ' . $domain->virustotal_total;
-            $report_link_column = '<a rel="noopener noreferrer" target="_blank" href="' . $domain->virustotal_domain_info_url . '">' .  $this->lmsg('virustotalReport') . '</a>';
-            
+            $scan_date_column = isset($domain->virustotal_scan_date) ? $domain->virustotal_scan_date : '';
             if (isset($domain->no_scanning_results)) {
                 $result_column = $domain->no_scanning_results;
                 $report_link_column = '';
+            } else {
+                $result_column = $domain->virustotal_positives . ' / ' . $domain->virustotal_total;
+                $report_link_column = '<a rel="noopener noreferrer" target="_blank" href="' . $domain->virustotal_domain_info_url . '">' .  $this->lmsg('virustotalReport') . '</a>';
             }
             
             $data[$i] = [
                 'column-1' => '<a target="_blank" href="/admin/subscription/login/id/' . $domain->webspace_id . '?pageUrl=/web/overview/id/d:' . $domain->id . '">' . $domain->name . '</a>',
                 'column-2' => $domain->getAvailable(),
-                'column-3' => $domain->virustotal_scan_date,
+                'column-3' => $scan_date_column,
                 'column-4' => $result_column,
                 'column-5' => $report_link_column,
             ];
