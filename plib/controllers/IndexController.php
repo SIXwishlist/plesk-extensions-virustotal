@@ -52,14 +52,22 @@ class IndexController extends pm_Controller_Action
         
         $this->view->summary = $this->_getReportSummary();
         $this->view->list = $this->_getDomainsReportList();
-        $this->view->scan = '';
+        $this->view->scan = [];
         
         if (class_exists('pm_LongTask_Manager')) {
             $taskManager = new pm_LongTask_Manager();
 
             $task1 = new Modules_VirustotalSiteChecker_Task_Scan();
+            $isRunning = pm_Settings::get('scan_lock');
+            $action = $isRunning ? 'start' : 'stop';
 
-            $this->view->scan = "I'm a scan button";
+            $this->view->scan[] = [
+                'title' => $isRunning ? $this->lmsg('buttonStartScan') : $this->lmsg('buttonStopScan'),
+                'description' => $isRunning ? $this->lmsg('buttonDisableDesc') : $this->lmsg('buttonEnableDesc'),
+                'icon' => pm_Context::getBaseUrl() . "images/{$action}.png",
+                'link' => $this->view->getHelper('baseUrl')->moduleUrl(['action' => $action]),
+            ];
+            
         }
     }
 
