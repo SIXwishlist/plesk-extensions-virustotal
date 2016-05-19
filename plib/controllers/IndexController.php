@@ -1,6 +1,4 @@
 <?php
-// plesk bin extension --create my-extension
-// plesk bin extension --register my-extension
 
 class IndexController extends pm_Controller_Action
 {
@@ -50,25 +48,42 @@ class IndexController extends pm_Controller_Action
             $this->_status->addError($this->lmsg('apiKeyBecameInvalid'));
         }
         
-        $this->view->summary = $this->_getReportSummary();
         $this->view->list = $this->_getDomainsReportList();
         $this->view->scan = [];
         
-        if (class_exists('pm_LongTask_Manager')) {
-            $taskManager = new pm_LongTask_Manager();
-
-            $task1 = new Modules_VirustotalSiteChecker_Task_Scan();
+        if (class_exists('pm_LongTask_Manager')) { // Since Plesk 17.0
             $isRunning = pm_Settings::get('scan_lock');
-            $action = $isRunning ? 'start' : 'stop';
+            $action = $isRunning ? 'stop' : 'start';
 
             $this->view->scan[] = [
-                'title' => $isRunning ? $this->lmsg('buttonStartScan') : $this->lmsg('buttonStopScan'),
-                'description' => $isRunning ? $this->lmsg('buttonDisableDesc') : $this->lmsg('buttonEnableDesc'),
-                'icon' => pm_Context::getBaseUrl() . "images/{$action}.png",
+                'title' => $isRunning ? $this->lmsg('buttonStopScan') : $this->lmsg('buttonStartScan'),
+                'description' => $isRunning ? $this->lmsg('buttonStopDesc') : $this->lmsg('buttonStartDesc'),
+                'icon' => pm_Context::getBaseUrl() . "/images/{$action}.png",
                 'link' => $this->view->getHelper('baseUrl')->moduleUrl(['action' => $action]),
             ];
             
+        } else {
+            $this->view->summary = $this->_getReportSummary();
         }
+    }
+
+    public function startAction()
+    {
+        $taskManager = new pm_LongTask_Manager();
+        $task1 = new Modules_VirustotalSiteChecker_Task_Scan();
+        $taskManager->start($task1);
+        
+        $this->view->status->addInfo($this->lmsg('infoStartSuccess'));
+        $this->_redirect(pm_Context::getBaseUrl());
+    }
+
+    public function stopAction()
+    {
+        $taskManager = new pm_LongTask_Manager();
+        $taskManager->cancelAllTasks();
+        
+        $this->view->status->addInfo($this->lmsg('infoStopSuccess'));
+        $this->_redirect(pm_Context::getBaseUrl());
     }
 
     public function reportDataAction()

@@ -1,38 +1,27 @@
 <?php
 
-class Modules_VirustotalSiteChecker_Task_Scan extends pm_LongTask_Task
+class Modules_VirustotalSiteChecker_Task_Scan extends pm_LongTask_Task // Since Plesk 17.0
 {
     public $trackProgress = true;
 
     public function run()
     {
-        sleep(2);
-        $this->updateProgress(30);
-        sleep(2);
-        $this->updateProgress(60);
-        sleep(2);
-        $this->updateProgress(90);
-        sleep(2);
+        Modules_VirustotalSiteChecker_Helper::check(); // scan_lock is acquired inside check()
     }
 
     public function statusMessage()
     {
         switch ($this->getStatus()) {
             case static::STATUS_QUEUE:
-                return pm_Locale::lmsg('queued');
+                return pm_Locale::lmsg('scanTaskQueued');
             case static::STATUS_DONE:
-                return pm_Locale::lmsg('done', ['id' => $this->getId()]);
+                return pm_Locale::lmsg('scanTaskDone');
         }
         return '';
     }
 
-    public function onStart()
-    {
-        $this->setParam('onStart', 1);
-    }
-
     public function onDone()
     {
-        $this->setParam('onDone', 1);
+        pm_Settings::set('scan_lock', 0); // Just in case some troubles inside check()
     }
 }

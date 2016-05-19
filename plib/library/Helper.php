@@ -9,7 +9,7 @@ class Modules_VirustotalSiteChecker_Helper
     const virustotal_api_day_limit = 4320;
     const virustotal_api_hour_limit = 180;
 
-    public static  function check()
+    public static function check()
     {           
         if (!pm_Settings::get('virustotal_enabled') || !pm_Settings::get('virustotal_api_key')) {
             return;
@@ -19,10 +19,20 @@ class Modules_VirustotalSiteChecker_Helper
             pm_Log::err(pm_Locale::lmsg('apiKeyBecameInvalid'));
             return;
         }
-
-        self::report();
         
-        foreach (self::getDomains() as $domain) {
+        if (pm_Settings::get('scan_lock')) {
+            pm_Log::debug(pm_Locale::lmsg('errorScanAlreadyRunning'));
+            return;
+        } else {
+            pm_Settings::set('scan_lock', 1); // Also set to 0 in self::is_enough()
+        }
+        
+        self::report();
+        $i = 1;
+        $domains = self::getDomains();
+        foreach ($domains as $domain) {
+            $i++;
+
             if (!self::is_last_domain('check', $domain)) {
                 continue;
             }
@@ -34,6 +44,8 @@ class Modules_VirustotalSiteChecker_Helper
             if (!$report) {
                 $report = [];
             }
+
+            self::set_progress($i, count($domains) + 1, 2, 2);
             
             if (!$domain->isAvailable()) {
                 $report['domain'] = $domain;
@@ -41,7 +53,8 @@ class Modules_VirustotalSiteChecker_Helper
                 continue;
             }
             
-            if (self::is_enough()) {
+            if (self::is_enough() || !pm_Settings::get('scan_lock')) {
+                pm_Settings::set('scan_lock', 0);
                 exit(0);
             }
             $report['domain'] = $domain;
@@ -61,13 +74,15 @@ class Modules_VirustotalSiteChecker_Helper
             pm_Settings::set('domain_id_' . $domain->id, json_encode($report));
             pm_Settings::set('last_scan', date("d/M/Y G:i"));
         }
-
+        
+        pm_Settings::set('scan_lock', 0);
+        
         self::cleanup_last_domains();
         self::cleanup_deleted_domains();
     }
 
     /**
-     * VirusTotal API has restriction in 4 req/min, for safety we have limit to 3 req/min (4320 req/day)
+     * VirusTotal API has restriction in 4 req/min, for safety we have limit to 3 req/min (180 req/hour, 4320 req/day)
      * 
      * @return bool
      */
@@ -79,6 +94,35 @@ class Modules_VirustotalSiteChecker_Helper
         }
         $counter++;
         return false;
+    }
+
+    /**
+     * Update progress for long task
+     * @param $current int
+     * @param $total int
+     * @param $phase int
+     * @param $phases int
+     * @return int
+     */
+    public static function set_progress($current, $total, $phase, $phases)
+    {
+        $current_amplification = ($current * ($phase / $phases)) + ($total - ( $total * ($phases - $phase)));
+        $total_amplification = $total * ($phases * ($phase / $phases) );
+
+        $progress = ($current_amplification / $total_amplification) * 100;
+
+        pm_Settings::set('scan_progress', $progress);
+
+        if (class_exists('pm_LongTask_Manager')) { // Since Plesk 17.0
+            $taskManager = new pm_LongTask_Manager();
+
+            $tasks = $taskManager->getTasks(['task_scan']);
+            foreach ($tasks as $task) {
+                $task->updateProgress($progress);
+            }
+        }
+
+        return $progress;
     }
 
     /**
@@ -104,7 +148,11 @@ class Modules_VirustotalSiteChecker_Helper
 
     public static function report()
     {
-        foreach (self::getDomains() as $domain) {
+        $i = 1;
+        $domains = self::getDomains();
+        foreach ($domains as $domain) {
+            $i++;
+
             if (!self::is_last_domain('report', $domain)) {
                 continue;
             }
@@ -112,7 +160,11 @@ class Modules_VirustotalSiteChecker_Helper
             if (!$request) {
                 continue;
             }
-            if (self::is_enough()) {
+
+            self::set_progress($i, count($domains) + 1, 1, 2);
+
+            if (self::is_enough() || !pm_Settings::get('scan_lock')) {
+                pm_Settings::set('scan_lock', 0);
                 exit(0);
             }
             $report = self::virustotal_scan_url_report($domain->ascii_name);
