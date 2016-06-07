@@ -81,7 +81,9 @@ class IndexController extends pm_Controller_Action
     {
         $taskManager = new pm_LongTask_Manager();
         $taskManager->cancelAllTasks();
-        
+
+        pm_Settings::set('scan_lock', 0);
+
         $this->view->status->addInfo($this->lmsg('infoStopSuccess'));
         $this->_redirect(pm_Context::getBaseUrl());
     }

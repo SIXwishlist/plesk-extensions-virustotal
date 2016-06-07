@@ -21,10 +21,16 @@ class Modules_VirustotalSiteChecker_Helper
         }
         
         if (pm_Settings::get('scan_lock')) {
-            pm_Log::debug(pm_Locale::lmsg('errorScanAlreadyRunning'));
-            return;
+            $last_scan = DateTime::createFromFormat('d/M/Y G:i', pm_Settings::get('last_scan'));
+            $now = new DateTime();
+            $interval = $now->diff($last_scan);
+            if ($interval->h < 1) {
+                pm_Log::debug(pm_Locale::lmsg('errorScanAlreadyRunning'));
+                return;
+            }
         } else {
-            pm_Settings::set('scan_lock', 1); // Also set to 0 in self::is_enough()
+            pm_Settings::set('scan_lock', 1); // Also set to 0 after check self::is_enough()
+            pm_Settings::set('last_scan', date('d/M/Y G:i'));
         }
         
         self::report();
@@ -63,6 +69,7 @@ class Modules_VirustotalSiteChecker_Helper
             $request = self::virustotal_scan_url_request($domain->ascii_name);
             if (empty($request)) {
                 pm_Log::debug('Empty request ' . print_r($request, 1));
+                pm_Settings::set('scan_lock', 0);
                 return;
             }
             
@@ -72,7 +79,7 @@ class Modules_VirustotalSiteChecker_Helper
             );
 
             pm_Settings::set('domain_id_' . $domain->id, json_encode($report));
-            pm_Settings::set('last_scan', date("d/M/Y G:i"));
+
         }
         
         pm_Settings::set('scan_lock', 0);
