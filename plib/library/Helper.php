@@ -30,8 +30,9 @@ class Modules_VirustotalSiteChecker_Helper
             }
         } else {
             pm_Settings::set('scan_lock', 1); // Also set to 0 after check self::is_enough()
-            pm_Settings::set('last_scan', date('d/M/Y G:i'));
         }
+
+        pm_Settings::set('last_scan', date('d/M/Y G:i')); // Has dependency with scan_lock
         
         self::report();
         $i = 1;
