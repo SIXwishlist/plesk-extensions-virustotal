@@ -72,7 +72,14 @@ class IndexController extends pm_Controller_Action
         $taskManager = new pm_LongTask_Manager();
         $task1 = new Modules_VirustotalSiteChecker_Task_Scan();
         $taskManager->start($task1);
-        
+
+        for ($i = 1; $i < 5; $i++) { // wait for acquiring lock to keep UI consistent
+            if (pm_Settings::get('scan_lock')) {
+                break;
+            }
+            sleep(1);
+        }
+
         $this->view->status->addInfo($this->lmsg('infoStartSuccess'));
         $this->_redirect(pm_Context::getBaseUrl());
     }
