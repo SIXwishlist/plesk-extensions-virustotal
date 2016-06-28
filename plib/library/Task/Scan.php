@@ -12,8 +12,8 @@ class Modules_VirustotalSiteChecker_Task_Scan extends pm_LongTask_Task // Since 
     public function statusMessage()
     {
         switch ($this->getStatus()) {
-            case static::STATUS_QUEUE:
-                return pm_Locale::lmsg('scanTaskQueued');
+            case static::STATUS_RUNNING:
+                return pm_Locale::lmsg('scanTaskRunning');
             case static::STATUS_DONE:
                 return pm_Locale::lmsg('scanTaskDone');
         }

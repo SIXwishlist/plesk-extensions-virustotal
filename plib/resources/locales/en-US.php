@@ -17,7 +17,7 @@ $messages = array(
     'buttonStopDesc' => 'Stop Scanning',
     'infoStartSuccess' => 'Scanning successfully started',
     'infoStopSuccess' => 'Scanning successfully stopped',
-    'scanTaskQueued' => 'Scanning sites for viruses:',
+    'scanTaskRunning' => 'Scanning sites for viruses:',
     'scanTaskDone' => 'Sites scanning finished. <a href="#" onclick="window.location.reload();">Refresh page</a>',
     'errorScanAlreadyRunning' => 'Scanning is already running.',
     'domain' => 'Domain',

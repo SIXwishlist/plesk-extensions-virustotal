@@ -17,7 +17,7 @@ $messages = array(
     'buttonStopDesc' => 'Остановить сканирование',
     'infoStartSuccess' => 'Сканирование началось',
     'infoStopSuccess' => 'Сканирование остановлено',
-    'scanTaskQueued' => 'Выполняется сканирование сайтов на вирусы:',
+    'scanTaskRunning' => 'Выполняется сканирование сайтов на вирусы:',
     'scanTaskDone' => 'Сканирование сайтов на вирусы завершено. <a href="#" onclick="window.location.reload();">Обновить страницу</a>',
     'errorScanAlreadyRunning' => 'Сканирование уже выполняется.',
     'domain' => 'Домен',
