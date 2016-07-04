@@ -1,5 +1,5 @@
 <?php
-
+// Copyright 1999-2016. Parallels IP Holdings GmbH.
 $messages = array(
     'tabReports' => 'Отчеты',
     'tabSettings' => 'Настройки',

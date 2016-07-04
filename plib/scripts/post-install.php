@@ -1,5 +1,5 @@
 <?php
-
+// Copyright 1999-2016. Parallels IP Holdings GmbH.
 pm_Context::init('virustotal-site-checker');
 
 pm_Settings::set('_promo_admin_home', 1);

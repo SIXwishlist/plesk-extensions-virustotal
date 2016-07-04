@@ -1,4 +1,5 @@
 <?php
+// Copyright 1999-2016. Parallels IP Holdings GmbH.
 
 class Modules_VirustotalSiteChecker_Task_Scan extends pm_LongTask_Task // Since Plesk 17.0
 {

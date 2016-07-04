@@ -1,4 +1,5 @@
 <?php
+// Copyright 1999-2016. Parallels IP Holdings GmbH.
 
 class Modules_VirustotalSiteChecker_SettingsForm extends pm_Form_Simple
 {
