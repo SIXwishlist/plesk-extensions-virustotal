@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module>
-  <id>virustotal-site-checker</id>
-  <name>Virus Site Checker</name>
-  <description>Automate your sites virus checking for free.</description>
+  <id>website-virus-check</id>
+  <name>Website Virus Check</name>
+  <description>Check your websites for viruses automatically using multiple anti-virus engines.</description>
   <description xml:lang="ru-RU">Автоматизируйте бесплатную проверку своих сайтов на вирусы.</description>
   <version>1.0</version>
   <release>1</release>
-  <vendor>Oleg Neumyvakin</vendor>
-  <url>https://github.com/oneumyvakin/plesk-extensions-virustotal</url>
+  <vendor>Plesk</vendor>
+  <url>https://github.com/oneumyvakin/ext-website-virus-check</url>
   <plesk_min_version>12.5.30</plesk_min_version>
 </module>
