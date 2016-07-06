@@ -42,7 +42,7 @@ $messages = array(
     'totalReports' => 'Total "bad" domains: ',
     'lastScan' => 'last scanning performed on ',
     'about' => 'This extension uses the <a rel="noopener noreferrer" target=\'_blank\' href=\'https://virustotal.com/\'>public API</a> to detect malicious scripts on your websites. API requests are executed using daily scheduled tasks at <a href="/admin/scheduler/tasks-list">Scheduled Tasks</a>',
-    'feedback' => 'Submit any questions to <a rel="noopener noreferrer" target="_blank" href="http://serverfault.com/questions/ask?tags=plesk+virustotal">serverfault.com</a> using the tags "plesk" and "virustotal"',
+    'feedback' => 'If you have any questions or concerns about this extension, please feel free to submit issue in extension repository on <a rel="noopener noreferrer" target="_blank" href="https://github.com/plesk/ext-website-virus-check">GitHub</a>',
     'faq' => 'FAQ',
     'question1' => '<p><b>Q: Why there are no e-mail notifications?</b><br />A: We have no way of knowing that e-mails will reach your inbox.</p>',
     'question2' => '<p><b>Q: Why daily scheduled tasks take so long to execute?</b><br />A: Because of the limitations of the public API the extension sends the API requests at the speed of 3 domains per minute.</p>',
