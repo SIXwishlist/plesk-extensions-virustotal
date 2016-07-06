@@ -1,7 +1,7 @@
-# Plesk extension: VirusTotal Site Checker
+# Plesk extension: VirusTotal Website Check
 Check Plesk sites with VirusTotal API
 
-![plesk-extensions-virustotal](https://raw.githubusercontent.com/oneumyvakin/plesk-extensions-virustotal/master/_meta/screenshots/1.png)
+![website-virus-check](https://raw.githubusercontent.com/oneumyvakin/ext-website-virus-check/master/_meta/screenshots/1.png)
 
 
-![plesk-extensions-virustotal](https://raw.githubusercontent.com/oneumyvakin/plesk-extensions-virustotal/master/_meta/screenshots/2.png)
+![website-virus-check](https://raw.githubusercontent.com/oneumyvakin/ext-website-virus-check/master/_meta/screenshots/2.png)
