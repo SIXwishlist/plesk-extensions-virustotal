@@ -1,7 +1,7 @@
 <?php
 // Copyright 1999-2016. Parallels IP Holdings GmbH.
 
-class Modules_VirustotalSiteChecker_Helper
+class Modules_WebsiteVirusCheck_Helper
 {
     const virustotal_scan_url = 'https://www.virustotal.com/vtapi/v2/url/scan';
     const virustotal_report_url = 'https://www.virustotal.com/vtapi/v2/url/report';
@@ -136,7 +136,7 @@ class Modules_VirustotalSiteChecker_Helper
 
     /**
      * @param  $operation string
-     * @param  $domain Modules_VirustotalSiteChecker_PleskDomain
+     * @param  $domain Modules_WebsiteVirusCheck_PleskDomain
      * @return bool
      */
     public static function is_last_domain($operation, $domain)
@@ -217,7 +217,7 @@ class Modules_VirustotalSiteChecker_Helper
     }
     
     /**
-     * @param $domain Modules_VirustotalSiteChecker_PleskDomain
+     * @param $domain Modules_WebsiteVirusCheck_PleskDomain
      * @param $new_report array
      * @return null
      */
@@ -280,8 +280,8 @@ class Modules_VirustotalSiteChecker_Helper
 
     /**
      * @return array[string]
-     *              ['all']     Modules_VirustotalSiteChecker_PleskDomain[]
-     *              ['bad']     Modules_VirustotalSiteChecker_PleskDomain[]
+     *              ['all']     Modules_WebsiteVirusCheck_PleskDomain[]
+     *              ['bad']     Modules_WebsiteVirusCheck_PleskDomain[]
      *              ['total']   int
      */
     public static function getDomainsReport()
@@ -330,7 +330,7 @@ class Modules_VirustotalSiteChecker_Helper
     }
 
     /**
-     * @return Modules_VirustotalSiteChecker_PleskDomain[]
+     * @return Modules_WebsiteVirusCheck_PleskDomain[]
      */
     public static function getDomains()
     {
@@ -358,7 +358,7 @@ class Modules_VirustotalSiteChecker_Helper
                 continue;
             }
 
-            $domains[$domain->id] = new Modules_VirustotalSiteChecker_PleskDomain(
+            $domains[$domain->id] = new Modules_WebsiteVirusCheck_PleskDomain(
                 $domain->id,
                 $domain->data->gen_info->name,
                 $domain->data->gen_info->{'ascii-name'},

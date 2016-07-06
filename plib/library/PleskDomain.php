@@ -1,7 +1,7 @@
 <?php
 // Copyright 1999-2016. Parallels IP Holdings GmbH.
 
-class Modules_VirustotalSiteChecker_PleskDomain
+class Modules_WebsiteVirusCheck_PleskDomain
 {
     function __construct($id, $name, $ascii_name, $status, $dns_ip_address, $htype, $webspace_id) {
         $this->id = $id;

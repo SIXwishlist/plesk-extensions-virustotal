@@ -1,13 +1,13 @@
 <?php
 // Copyright 1999-2016. Parallels IP Holdings GmbH.
 
-class Modules_VirustotalSiteChecker_Task_Scan extends pm_LongTask_Task // Since Plesk 17.0
+class Modules_WebsiteVirusCheck_Task_Scan extends pm_LongTask_Task // Since Plesk 17.0
 {
     public $trackProgress = true;
 
     public function run()
     {
-        Modules_VirustotalSiteChecker_Helper::check(); // scan_lock is acquired inside check()
+        Modules_WebsiteVirusCheck_Helper::check(); // scan_lock is acquired inside check()
     }
 
     public function statusMessage()

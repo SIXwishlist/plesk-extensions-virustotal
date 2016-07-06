@@ -71,7 +71,7 @@ class IndexController extends pm_Controller_Action
     public function startAction()
     {
         $taskManager = new pm_LongTask_Manager();
-        $task1 = new Modules_VirustotalSiteChecker_Task_Scan();
+        $task1 = new Modules_WebsiteVirusCheck_Task_Scan();
         $taskManager->start($task1);
 
         for ($i = 1; $i < 5; $i++) { // wait for acquiring lock to keep UI consistent
@@ -111,7 +111,7 @@ class IndexController extends pm_Controller_Action
         
         $this->view->help_tip = $this->lmsg('apikey_help');
 
-        $form = new Modules_VirustotalSiteChecker_SettingsForm();
+        $form = new Modules_WebsiteVirusCheck_SettingsForm();
 
         $form->addElement('checkbox', 'virustotal_enabled', [
             'label' => $this->lmsg('virustotalEnabled'),
@@ -166,7 +166,7 @@ class IndexController extends pm_Controller_Action
     
     private function _getReportSummary()
     {
-        $report = Modules_VirustotalSiteChecker_Helper::getDomainsReport();
+        $report = Modules_WebsiteVirusCheck_Helper::getDomainsReport();
                 
         $total_domains = $report['total'];
         $last_scan = pm_Settings::get('last_scan');
@@ -188,7 +188,7 @@ class IndexController extends pm_Controller_Action
     {
         $i = 0;
         $data = [];
-        $report = Modules_VirustotalSiteChecker_Helper::getDomainsReport();
+        $report = Modules_WebsiteVirusCheck_Helper::getDomainsReport();
         foreach ($report['all'] as $domain) {
             $i++;
 

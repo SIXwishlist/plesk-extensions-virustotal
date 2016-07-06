@@ -1,7 +1,7 @@
 <?php
 // Copyright 1999-2016. Parallels IP Holdings GmbH.
 
-class Modules_VirustotalSiteChecker_SettingsForm extends pm_Form_Simple
+class Modules_WebsiteVirusCheck_SettingsForm extends pm_Form_Simple
 {
     /**
      * Validate the form
@@ -18,7 +18,7 @@ class Modules_VirustotalSiteChecker_SettingsForm extends pm_Form_Simple
         $promo_enabled = $this->getElement('_promo_admin_home')->getValue();
 
         if ($virustotal_enabled) {
-            $isKey = Modules_VirustotalSiteChecker_Helper::checkApiKey($virustotal_api_key);
+            $isKey = Modules_WebsiteVirusCheck_Helper::checkApiKey($virustotal_api_key);
             if ($isKey['valid']) {
                 return true;
             }
