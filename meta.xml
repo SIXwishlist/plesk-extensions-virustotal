@@ -7,6 +7,6 @@
   <version>1.0</version>
   <release>1</release>
   <vendor>Plesk</vendor>
-  <url>https://github.com/oneumyvakin/ext-website-virus-check</url>
+  <url>https://github.com/plesk/ext-website-virus-check</url>
   <plesk_min_version>12.5.30</plesk_min_version>
 </module>
